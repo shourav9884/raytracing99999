@@ -4,7 +4,7 @@
 #include "Sphere.h"
 #include "OmniLight.h"
 
-#include "Image.h"
+#include "Texture.h"
 
 Scene::Scene(void)
 {
@@ -24,10 +24,10 @@ void Scene::init( )
 	Box *tempBox = new Box(Vector3D(0.0,-3.0,3.0), 15.0, 1.0, 15.0);
 	tempBox->getMaterial().setSpecularLevel(0.5f);
 	tempBox->getMaterial().setGlossiness(1.0);
-	Image *tempImage = new Image("images/brickwallDiffuse.png");
+	Texture *tempImage = new Texture("images/brickwallDiffuse.png", Texture::BILINEAR);
 	tempBox->getMaterial().setDiffuseMap(tempImage);
 	tempBox->getMaterial().setAmbientMap(tempImage);
-	tempBox->getMaterial().setSpecularMap(new Image("images/brickwallSpecular.png"));;
+	tempBox->getMaterial().setSpecularMap(new Texture("images/brickwallSpecular.png", Texture::BILINEAR));
 	this->sceneObjects.push_back(tempBox);
 
 	//Plane *tempPlane = new Plane(Vector3D(0,1,0), Vector3D(0,0,0));
@@ -42,7 +42,7 @@ void Scene::init( )
 	tempSphere->getMaterial().setGlossiness(10.0);
 	//tempSphere->getMaterial().setReflect(0.3f);
 	tempSphere->getMaterial().setRefract(0.5);
-	tempSphere->getMaterial().setIndexOfRefraction(0.8f);
+	tempSphere->getMaterial().setIndexOfRefraction(1.6f);
 	this->sceneObjects.push_back( tempSphere );
 
 	// Esfera2

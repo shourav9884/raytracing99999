@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ColorRGBf.h"
-#include "Image.h"
+#include "Texture.h"
 #include "Vector2D.h"
 
 class Material
@@ -9,18 +9,18 @@ class Material
 private:
 	// Diffusa
 	ColorRGBf diffuseColor;
-	Image *diffuseMap;
+	Texture *diffuseMap;
 
 	// Specular
 	ColorRGBf specularColor;
 	float specularLevel;
 	double glossiness;
 	float soften;
-	Image *specularMap;
+	Texture *specularMap;
 
 	// Ambiental
 	ColorRGBf ambientColor;
-	Image *ambientMap;
+	Texture *ambientMap;
 
 	// Reflexao
 	float reflect;
@@ -67,12 +67,11 @@ public:
 		}
 		else
 		{
-			ColorRGBub tempColor = this->diffuseMap->getPixel(static_cast<float>(aTextureUVCoordinates.x), static_cast<float>(aTextureUVCoordinates.y));
-			return tempColor.toColorRGBf( );
+			return this->diffuseMap->getPixel(static_cast<float>(aTextureUVCoordinates.x), static_cast<float>(aTextureUVCoordinates.y));
 		}
 	}
 
-	inline void setDiffuseMap( Image *aDiffuseMap )
+	inline void setDiffuseMap( Texture *aDiffuseMap )
 	{
 		this->diffuseMap = aDiffuseMap;
 	}
@@ -95,12 +94,11 @@ public:
 		}
 		else
 		{
-			ColorRGBub tempColor = this->specularMap->getPixel(static_cast<float>(aTextureUVCoordinates.x), static_cast<float>(aTextureUVCoordinates.y));
-			return tempColor.toColorRGBf( );
+			return this->specularMap->getPixel(static_cast<float>(aTextureUVCoordinates.x), static_cast<float>(aTextureUVCoordinates.y));
 		}
 	}
 
-	inline void setSpecularMap( Image *aSpecularMap )
+	inline void setSpecularMap( Texture *aSpecularMap )
 	{
 		this->specularMap = aSpecularMap;
 	}
@@ -123,12 +121,12 @@ public:
 		}
 		else
 		{
-			ColorRGBub tempColor = this->ambientMap->getPixel(static_cast<float>(aTextureUVCoordinates.x), static_cast<float>(aTextureUVCoordinates.y));
-			return tempColor.toColorRGBf( );
+			return this->ambientMap->getPixel(static_cast<float>(aTextureUVCoordinates.x), static_cast<float>(aTextureUVCoordinates.y));
+			
 		}
 	}
 
-	inline void setAmbientMap( Image *aAmbientMap )
+	inline void setAmbientMap( Texture *aAmbientMap )
 	{
 		this->ambientMap = aAmbientMap;
 	}

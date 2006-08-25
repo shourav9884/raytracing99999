@@ -26,9 +26,9 @@ private:
 	int type;
 
 public:
-	Image(void);
-	Image( char *aFileName );
-	~Image(void);
+	Image( void );
+	Image( const char *aFileName );
+	~Image( void );
 
 	inline int getWidth() const
 	{
@@ -54,40 +54,20 @@ public:
 	{
 		ColorRGBub result(0,0,0);		
 
-		// Se a imagem foi inicializa
-		if(this->imageData != NULL)
-		{	
-			const int deslocX = xPosition*this->bytesPerPixel;
-			const int deslocY = yPosition*this->width*this->bytesPerPixel;
+		if( xPosition < this->width && yPosition < this->height )
+		{
+			// Se a imagem foi inicializa
+			if(this->imageData != NULL)
+			{	
+				const int deslocX = xPosition*this->bytesPerPixel;
+				const int deslocY = yPosition*this->width*this->bytesPerPixel;
 
-			// Lembrar que BMP além de serem escritos de cabeca para baixo, eles tambem
-			// possuem um pixel format diferente (BGR ao inves de RGB)
-			result.r = this->imageData[deslocX + deslocY + 0];
-			result.g = this->imageData[deslocX + deslocY + 1];
-			result.b = this->imageData[deslocX + deslocY + 2];				
-		}
-
-		return result;
-	}
-
-	inline ColorRGBub getPixel( float xPositionNormalized, float yPositionNormalized )
-	{
-		ColorRGBub result(0,0,0);
-
-		int x = static_cast<int>(xPositionNormalized * this->width);
-		int y = static_cast<int>(yPositionNormalized * this->height);
-
-		// Se a imagem foi inicializa
-		if(this->imageData != NULL)
-		{	
-			const int deslocX = x*this->bytesPerPixel;
-			const int deslocY = y*this->width*this->bytesPerPixel;
-
-			// Lembrar que BMP além de serem escritos de cabeca para baixo, eles tambem
-			// possuem um pixel format diferente (BGR ao inves de RGB)
-			result.r = this->imageData[deslocX + deslocY + 0];
-			result.g = this->imageData[deslocX + deslocY + 1];
-			result.b = this->imageData[deslocX + deslocY + 2];				
+				// Lembrar que BMP além de serem escritos de cabeca para baixo, eles tambem
+				// possuem um pixel format diferente (BGR ao inves de RGB)
+				result.r = this->imageData[deslocX + deslocY + 0];
+				result.g = this->imageData[deslocX + deslocY + 1];
+				result.b = this->imageData[deslocX + deslocY + 2];				
+			}
 		}
 
 		return result;

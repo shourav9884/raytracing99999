@@ -16,7 +16,7 @@ Image::Image(void)
 	}
 }
 
-Image::Image( char *aFileName )
+Image::Image( const char *aFileName )
 {
 	if( !Image::DevILInited )
 	{
