@@ -36,12 +36,12 @@ double Plane::checkIntersection( const Ray& aRay )
 	return result;
 }
 
-Vector3D Plane::getNormalVector( const Vector3D &aPoint, double t )
+Vector3D Plane::getNormalVector( const Vector3D& aPoint, Vector2D aTextureUVCoordinates )
 {
 	return this->vector;
 }
 
-Vector2D Plane::getTextureUVCoordinates( const Vector3D &aIntersectionPoint, const Vector3D &aNormalVector )
+Vector2D Plane::getTextureUVCoordinates( const Vector3D& aIntersectionPoint)
 {
 	Vector2D result;
 

@@ -27,6 +27,13 @@ public:
 		return result;
 	}
 
+	inline Vector3D changeToCanonicalBase( const Vector3D &aVector )
+	{
+		Vector3D result( (this->U * aVector.x) + (this->V * aVector.y) + (this->N * aVector.z) );
+
+		return result;
+	}
+
 	inline Base changeFromCanonicalBase( const Base &aBase )
 	{
 		Base result(this->changeFromCanonicalBase(aBase.U), 

@@ -11,7 +11,7 @@
 using namespace std;
 
 RayTracer::RayTracer(void)
-: zNear(0.0), zFar(20.0), tiny(0.2)
+: zNear(0.0), zFar(50.0), tiny(0.1)
 {
 }
 

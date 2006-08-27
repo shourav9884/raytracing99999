@@ -134,6 +134,17 @@ public:
 		return sqrt(this->x*this->x + this->y*this->y);
 	}
 
+	inline Vector3D crossProduct( const Vector3D &aVector ) const
+	{
+		Vector3D result;
+
+		result.x = this->y*aVector.z - this->z*aVector.y;
+		result.y = this->z*aVector.x - this->x*aVector.z;
+		result.z = this->x*aVector.y - this->y*aVector.x;
+
+		return result;
+	}
+
 	inline void normalize( )
 	{
 		double fLenght = sqrt(this->x*this->x + this->y*this->y + this->z*this->z);
@@ -148,14 +159,11 @@ public:
 		}
 	}
 
-	inline Vector3D crossProduct( const Vector3D &aVector ) const
+	inline Vector3D getNormalized( )
 	{
-		Vector3D result;
-
-		result.x = this->y*aVector.z - this->z*aVector.y;
-		result.y = this->z*aVector.x - this->x*aVector.z;
-		result.z = this->x*aVector.y - this->y*aVector.x;
-
+		Vector3D result = (*this);
+		result.normalize();
+		
 		return result;
 	}
 
@@ -166,4 +174,12 @@ public:
 		this->z *= -1;
 	}
 
+	inline Vector3D getinvertedDirection()
+	{
+		Vector3D result = (*this);
+		result.invertDirection();
+
+		return result;
+	}
+	
 };

@@ -1,5 +1,6 @@
 #include "Box.h"
 
+#include "Base.h"
 #include "Util.h"
 
 Box::Box(void)
@@ -87,23 +88,64 @@ double Box::checkIntersection( const Ray& aRay )
 	return result;
 }
 
-Vector3D Box::getNormalVector( const Vector3D &aPoint, double t )
+Vector3D Box::getNormalVector( const Vector3D& aPoint, Vector2D aTextureUVCoordinates )
 {
-	return this->planeIntersected->getVector();
+	Vector3D result(this->planeIntersected->getVector());
+
+	// Se existir um mapa de normais
+	if( this->material.existNormalMap() )
+	{		
+		Vector3D originalNormalVector = this->planeIntersected->getVector();
+
+		Vector3D normalVectorFromMap = this->material.getNormalResult( aTextureUVCoordinates ).toNormalizedVector3D();
+
+		Base normalMapBase;
+
+		if( originalNormalVector == Vector3D::UNIT_X )
+		{
+			normalMapBase = Base(Vector3D(0,1,0), Vector3D(0,0,1), Vector3D(1,0,0));
+		}	
+		else if( originalNormalVector == Vector3D::NEGATIVE_UNIT_X )
+		{
+			normalMapBase = Base(Vector3D(0,1,0), Vector3D(0,0,1), Vector3D(-1,0,0));
+		}
+		else if( originalNormalVector == Vector3D::UNIT_Y )
+		{
+			normalMapBase = Base(Vector3D(1,0,0), Vector3D(0,0,1), Vector3D(0,1,0));
+		}	
+		else if( originalNormalVector == Vector3D::NEGATIVE_UNIT_Y )
+		{
+			normalMapBase = Base(Vector3D(1,0,0), Vector3D(0,0,1), Vector3D(0,-1,0));
+		}
+		else if( originalNormalVector == Vector3D::UNIT_Z )
+		{
+			normalMapBase = Base(Vector3D(1,0,0), Vector3D(0,1,0), Vector3D(0,0,1));
+		}	
+		else if( originalNormalVector == Vector3D::NEGATIVE_UNIT_Z )
+		{
+			normalMapBase = Base(Vector3D(1,0,0), Vector3D(0,1,0), Vector3D(0,0,-1));
+		}
+
+		result = normalMapBase.changeToCanonicalBase(normalVectorFromMap);
+	}
+
+	return result;
 }
 
-Vector2D Box::getTextureUVCoordinates( const Vector3D &aIntersectionPoint, const Vector3D &aNormalVector )
+Vector2D Box::getTextureUVCoordinates( const Vector3D& aIntersectionPoint)
 {
 	Vector2D result;
 
-	if( aNormalVector == Vector3D::UNIT_X || aNormalVector == Vector3D::NEGATIVE_UNIT_X )
+	Vector3D normalVector = this->planeIntersected->getVector();
+
+	if( normalVector == Vector3D::UNIT_X || normalVector == Vector3D::NEGATIVE_UNIT_X )
 	{	
 		double y = (aIntersectionPoint.y - this->Bl.y)/(this->Bh.y - this->Bl.y);
 		double z = (aIntersectionPoint.z - this->Bl.z)/(this->Bh.z - this->Bl.z);
 
 		result = Vector2D(y, z);
 	}
-	else if( aNormalVector == Vector3D::UNIT_Y || aNormalVector == Vector3D::NEGATIVE_UNIT_Y )
+	else if( normalVector == Vector3D::UNIT_Y || normalVector == Vector3D::NEGATIVE_UNIT_Y )
 	{
 		double x = (aIntersectionPoint.x - this->Bl.x)/(this->Bh.x - this->Bl.x);
 		double z = (aIntersectionPoint.z - this->Bl.z)/(this->Bh.z - this->Bl.z);

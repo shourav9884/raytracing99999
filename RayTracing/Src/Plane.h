@@ -11,9 +11,9 @@ private:
 	// O ponto (View e World position) é herdado da Object3D que herda do SceneObject
 
 private:
-	Vector3D getNormalVector( const Vector3D &aPoint, double t );
+	Vector3D getNormalVector( const Vector3D& aPoint, Vector2D aTextureUVCoordinates );
 
-	Vector2D getTextureUVCoordinates( const Vector3D &aIntersectionPoint, const Vector3D &aNormalVector );
+	Vector2D getTextureUVCoordinates( const Vector3D& aIntersectionPoint);
 
 public:
 	Plane(void);

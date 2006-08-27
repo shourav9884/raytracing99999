@@ -7,6 +7,8 @@
 // Inicializacao dos atributos
 AppRoot *GLUTHandler::listener;
 bool GLUTHandler::showFPS = true;
+int GLUTHandler::windowWidth;
+int GLUTHandler::windowHeight;
 
 
 // Definicao das funcoes
@@ -49,12 +51,12 @@ void GLUTHandler::printFPS(double aDeltaTime)
 		const int stringLenght = 13;
 
 		char stringFPS[stringLenght];
-		sprintf_s( stringFPS, "FPS = %.3f", (1/deltaTimeUsed) );
+		sprintf_s( stringFPS, "FPS = %.3f", (1.0/deltaTimeUsed) );
 
 		glColor3f(1,0,1);
-		glRasterPos2i(2,15);
+		glRasterPos2i(2,GLUTHandler::windowHeight-5);
 
-		for( int i = 0; i < stringLenght; i++ )
+		for( int i = 0; i < stringLenght-2; i++ )
 		{
 			glutBitmapCharacter(GLUT_BITMAP_8_BY_13 , stringFPS[i] );		
 		}
@@ -93,6 +95,7 @@ void GLUTHandler::registerCallBacks( )
 	glutIdleFunc( &GLUTHandler::idleFunc );
 	glutKeyboardFunc( &GLUTHandler::keyboardFunc );
 	glutKeyboardUpFunc( &GLUTHandler::keyboardUpFunc );
+	glutReshapeFunc( &GLUTHandler::reshapeFunc );
 
 	// mouse
 	glutMotionFunc( motionFunc );
@@ -101,6 +104,9 @@ void GLUTHandler::registerCallBacks( )
 
 void GLUTHandler::startGLUT( int argc, char** args, int aWidth, int aHeight )
 {
+	GLUTHandler::windowWidth = aWidth;
+	GLUTHandler::windowHeight = aHeight;
+
 	// Inicializa o Glut
 	glutInit( &argc, args);
 
@@ -110,7 +116,7 @@ void GLUTHandler::startGLUT( int argc, char** args, int aWidth, int aHeight )
 	// Posição inicial da janela
 	glutInitWindowPosition( 10, 10 );	
 
-	glutInitWindowSize( aWidth, aHeight);
+	glutInitWindowSize( aWidth, aHeight );
 
 	// Cria a janela
 	glutCreateWindow( "RayTracing v0.00001" );
@@ -127,9 +133,9 @@ void GLUTHandler::setListener( AppRoot *listener )
 	GLUTHandler::listener = listener;
 }
 
-void GLUTHandler::drawPixels( int aWidth, int aHeight, void* aData )
+void GLUTHandler::drawPixels( void* aData )
 {
 	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton( );
 
-	renderSystem.drawPixels( aWidth, aHeight, aData);
+	renderSystem.drawPixels( aData);
 }

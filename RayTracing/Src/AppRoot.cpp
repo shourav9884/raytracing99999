@@ -34,42 +34,6 @@ AppRoot::~AppRoot(void)
 
 void AppRoot::init( int argc, char **args )
 {
-	Quaternion tempQuaternion(3.14/4,Vector3D(1,0,0));
-
-	Vector3D tempVector(0,0,1);
-	tempVector.normalize();
-	
-	Vector3D resultVector = tempQuaternion.rotate(tempVector);
-	resultVector.normalize();
-
-	int i = 0;
-
-	//Image image1("images/teste1.bmp");
-
-	//ILubyte *imageData = image1.getImageData();
-	//for( int i = 0; i < image1.getWidth() * image1.getHeight() * image1.getBytesPerPixel(); i ++ )
-	//{
-	//	printf("%u, ", *imageData);
-
-	//	imageData++;
-	//}
-
-	//printf("\n\n");
-	//for( int y = 0; y < image1.getHeight(); y++ )
-	//{
-	//	printf("{");
-	//	for( int x = 0; x <image1.getWidth(); x++ )
-	//	{
-	//		PixelRGBub pixel = image1.getPixel(x, y);
-
-	//		printf("{%u,", pixel.r );
-	//		printf("%u,", pixel.g );
-	//		printf("%u} ", pixel.b );
-	//	}
-	//	printf("}\n");
-	//}
-
-
 	this->rayTracer.init( );
 	this->scene.init( );
 	this->cameraController.setCamera( &this->scene.getCamera() );
@@ -89,7 +53,7 @@ void AppRoot::idleFunc( double deltaTime )
 
 	//Filter::scanImage( this->frameBuffer->colorBuffer, this->width, this->height, 3);
 
-	GLUTHandler::drawPixels( this->width, this->height, this->frameBuffer->colorBuffer );
+	GLUTHandler::drawPixels( this->frameBuffer->colorBuffer );
 
 	this->handleKeyboardInputs( deltaTime );
 
@@ -98,16 +62,16 @@ void AppRoot::idleFunc( double deltaTime )
 	////////////////////////////////////////////////////////////////////////////////////
 	static float angle = 0;
 	angle += 0.1;
-	float alplitude = 4;
+	float alplitude = 8;
 
 	Light * light =  scene.getSceneLights().at(0);
-	light->setWorldPosition(Vector3D(alplitude*sin(angle),alplitude*cos(angle)+5,-3));	
+	light->setWorldPosition(Vector3D(alplitude*sin(angle),alplitude*cos(angle),3));	
 	/////////////////////////////////////////////////////////////////////////////////////
 }
 
 void AppRoot::handleKeyboardInputs( double deltaTime )
 {	
-	float offset = 0.1;
+	float offset = 2.0*deltaTime;
 
 	// Translacoes
 	if( this->pressedKeyFORWARD )		

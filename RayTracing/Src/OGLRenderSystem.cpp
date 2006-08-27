@@ -11,12 +11,13 @@ OGLRenderSystem::OGLRenderSystem()
 {
 }
 
-OGLRenderSystem::~OGLRenderSystem()
-{
-}
-
 void OGLRenderSystem::init( int aWidth, int aHeight )
 {
+	// Inicializa atributos
+	this->width = aWidth;
+	this->height = aHeight;
+
+	// Inicializa OpenGL
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1); 
 
@@ -28,9 +29,12 @@ void OGLRenderSystem::init( int aWidth, int aHeight )
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity( );
 
-	this->reshapeCanvas(aWidth, aHeight);
+	// Reshape de canvas
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity( );	
+	glOrtho( 0.0, aWidth, aHeight, 0.0, 1.0, -1.0);	
 
-	glRasterPos2i( 0, 0 );
+	glRasterPos2i(0,aHeight);
 }
 
 OGLRenderSystem *OGLRenderSystem::getSingletonPtr( )
@@ -68,22 +72,23 @@ OGLRenderSystem &OGLRenderSystem::getSingleton( )
 //  | ----------------
 //   - x
 
-void OGLRenderSystem::drawPixels( int aWidth, int aHeight, void *aData )
+void OGLRenderSystem::drawPixels( void *aData )
 {
 	glClear( GL_COLOR_BUFFER_BIT );
 
 	// Reseta cursor para o inicio da tela
-	glRasterPos2i(0,aHeight);
+	glRasterPos2i(0,this->height);
 
 	// Desenha pixels
-	glDrawPixels( aWidth, aHeight, GL_RGB, GL_FLOAT, aData );
+	glDrawPixels( this->width, this->height, GL_RGB, GL_FLOAT, aData );
 
 	glFlush(); // Garante que a operacao de pintar seja completada	
 }
 
 void OGLRenderSystem::reshapeCanvas( int aWidth, int aHeight )
 {
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity( );	
-	glOrtho( 0.0, aWidth, aHeight, 0.0, 1.0, -1.0);	
+	float xFactor = aWidth/(float)this->width;
+	float yFactor = aHeight/(float)this->height;
+
+	glPixelZoom( xFactor, yFactor );
 }
