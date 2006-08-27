@@ -18,12 +18,12 @@ void Object3D::getIntersectionResults( const Ray& aRay, IntersectionResult& aRes
 							    aRay.point.y + (aRay.vector.y*resultT),
 							    aRay.point.z + (aRay.vector.z*resultT) );
 
+	aResult.textureUVCoordinates = this->getTextureUVCoordinates(intersectionPoint);
+
 	// Vetor normal do ponto onde houve a intersecao
-	Vector3D resultNormal = this->getNormalVector(intersectionPoint, resultT);
+	Vector3D resultNormal = this->getNormalVector(intersectionPoint, aResult.textureUVCoordinates);
 	// Normaliza o vetor normal
 	resultNormal.normalize();
-
-	aResult.textureUVCoordinates = this->getTextureUVCoordinates(intersectionPoint, resultNormal);
 
 	// Coloca o point de intersexao no retorno
 	aResult.point = intersectionPoint;

@@ -59,12 +59,12 @@ double Sphere::checkIntersection( const Ray& aRay )
 	return resultT;
 }
 
-Vector3D Sphere::getNormalVector( const Vector3D &aPoint, double t )
+Vector3D Sphere::getNormalVector( const Vector3D& aPoint, Vector2D aTextureUVCoordinates )
 {
 	return Vector3D( aPoint - this->worldPosition );
 }
 
-Vector2D Sphere::getTextureUVCoordinates( const Vector3D &aIntersectionPoint, const Vector3D &aNormalVector )
+Vector2D Sphere::getTextureUVCoordinates( const Vector3D& aIntersectionPoint)
 {
 	Vector2D result;
 

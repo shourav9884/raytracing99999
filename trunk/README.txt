@@ -26,20 +26,3 @@ Esquema da câmera:
    /    Plano de vista
   /
  /N
-
-
-
-
-cesarlimap: -
-
-u = (intersection.getY() - this->yMin->getPoint().getY()) /
-                                       (this->yMax->getPoint().getY() - this->yMin->getPoint().getY());
-                               v = (intersection.getZ() - this->zMax->getPoint().getZ()) /
-                                       (this->zMin->getPoint().getZ() - this->zMax->getPoint().getZ());
-
-
-
-
-tipo...esse eh um de tres casos... eh uma interpolação (axo q eh esse o nome)..
-Sent at 8:08 PM on Tuesday
-cesarlimap: pra achar o u e o v q serão usados pra mapear na matriz de pixels da imagem... só não estou entendendo quando usa as coordenadas y z ou x z ou x y pra fazer isso

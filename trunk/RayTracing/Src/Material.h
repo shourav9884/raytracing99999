@@ -29,6 +29,9 @@ private:
 	float refract;
 	float indexOfRefraction;
 
+	// Normal map
+	Texture *normalMap;
+
 private:
 	inline void initBaseAttributes()
 	{
@@ -42,6 +45,7 @@ private:
 		this->diffuseMap = NULL;
 		this->specularMap = NULL;
 		this->ambientMap = NULL;
+		this->normalMap = NULL;
 	}
 
 public:
@@ -189,5 +193,30 @@ public:
 	inline void setIndexOfRefraction( float aIndexOfRefraction )
 	{
 		this->indexOfRefraction = aIndexOfRefraction;
+	}
+
+	inline bool existNormalMap()
+	{
+		if( this->normalMap != NULL )
+			return true;
+		else
+			return false;
+	}
+
+	inline ColorRGBf getNormalResult( Vector2D &aTextureUVCoordinates )
+	{
+		if( this->normalMap == NULL )
+		{
+			return ColorRGBf(0.0,0.0,1.0);
+		}
+		else
+		{
+			return this->normalMap->getPixel(static_cast<float>(aTextureUVCoordinates.x), static_cast<float>(aTextureUVCoordinates.y));
+		}
+	}
+	
+	inline void setNormalMap( Texture *aNormalMap )
+	{
+		this->normalMap = aNormalMap;
 	}
 };

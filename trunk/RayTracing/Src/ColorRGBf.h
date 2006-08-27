@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector3D.h"
+
 class ColorRGBf
 {
 public:
@@ -60,6 +62,14 @@ public:
 		result.r = this->r / aValue;
 		result.g = this->g / aValue;
 		result.b = this->b / aValue;
+
+		return result;
+	}
+
+	inline Vector3D toNormalizedVector3D()
+	{
+		Vector3D result( (this->r-0.5)*2.0, (this->g-0.5)*2.0, (this->b-0.5)*2.0 );
+		result.normalize();
 
 		return result;
 	}

@@ -9,6 +9,8 @@ class GLUTHandler
 private: // Atributos
 	static AppRoot *listener;
 	static bool showFPS;
+	static int windowWidth;
+	static int windowHeight;
 	
 private:
 	// CallBacks
@@ -28,5 +30,5 @@ public:
 
 	static void startGLUT( int argc, char** args, int width = 640, int height = 480 );
 	static void setListener( AppRoot *listener );
-	static void drawPixels( int aWidth, int aHeight, void* aData );
+	static void drawPixels( void* aData );
 };

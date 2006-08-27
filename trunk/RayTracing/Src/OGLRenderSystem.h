@@ -5,9 +5,13 @@ class OGLRenderSystem
 private: // Atributos estaticos
 	static OGLRenderSystem *singleton;
 
+	int width;
+	int height;
+	float xScale;
+	float yScale;
+
 private:
 	OGLRenderSystem( );
-	~OGLRenderSystem( );	
 
 public: // Metodos estaticos
 	static OGLRenderSystem *getSingletonPtr( );
@@ -16,6 +20,6 @@ public: // Metodos estaticos
 	void init( int aWidth, int aHeight );
 
 public:
-	void drawPixels( int aWidth, int aHeight, void *aData );
+	void drawPixels( void *aData );
 	void reshapeCanvas( int aWidth, int aHeight );
 };
