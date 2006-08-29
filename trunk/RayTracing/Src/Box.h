@@ -42,6 +42,21 @@ private:
 	Vector2D getTextureUVCoordinates( const Vector3D& aIntersectionPoint);
 
 public:
+	inline void setBl( const Vector3D &aBl )
+	{
+		this->Bl = aBl;
+
+		this->updatePlanes();
+	}
+
+	inline void setBh( const Vector3D &aBh )
+	{
+		this->Bh = aBh;
+
+		this->updatePlanes();
+	}
+
+public:
 	Box(void);
 	Box( const Vector3D &aBl, const Vector3D &aBh);
 	Box( const Vector3D &aPosition, double aLenght, double aHeight, double aWidth);

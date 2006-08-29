@@ -7,6 +7,7 @@
 #include "Texture.h"
 
 Scene::Scene(void)
+: ambientLight( 0.3f, 0.3f, 0.3f )
 {
 }
 
@@ -21,23 +22,23 @@ void Scene::init( )
 	this->ambientLight = ColorRGBf(0.5f,0.5f,0.5f);
 
 	//Box *tempBox = new Box(Vector3D(-10.0,-1.0,-10.0),Vector3D(10.0,0.0,10.0));
-	Box *tempBox = new Box(Vector3D(0.0,-3.0,3.0), 15.0, 1.0, 15.0);
+	Box *tempBox = new Box(Vector3D(0.0,-3.0,3.0), 10.0, 5.0, 10.0);
 	tempBox->getMaterial().setSpecularLevel(1.0f);
 	tempBox->getMaterial().setGlossiness(1.0);
-	Texture *tempImage = new Texture("images/Fieldstone.jpg", Texture::BILINEAR);
+	Texture *tempImage = new Texture("images/cobblestonesDiffuse.tga", Texture::BILINEAR);
 	tempBox->getMaterial().setDiffuseMap(tempImage);
 	tempBox->getMaterial().setAmbientMap(tempImage);
-	tempBox->getMaterial().setNormalMap(new Texture("images/FieldstoneBumpDOT3.jpg", Texture::BILINEAR));
-	//tempBox->getMaterial().setSpecularMap(new Texture("images/brickwallSpecular.png", Texture::BILINEAR));
+	tempBox->getMaterial().setNormalMap(new Texture("images/cobblestonesNormal.tga", Texture::BILINEAR));
+	tempBox->getMaterial().setSpecularMap(new Texture("images/cobblestonesDepth.tga", Texture::BILINEAR));
 	this->sceneObjects.push_back(tempBox);
 
-	//Box *tempBox = new Box(Vector3D(-10.0,-1.0,-10.0),Vector3D(10.0,0.0,10.0));
-	tempBox = new Box(Vector3D(0.0,1.0,0.0), 1.0, 1.0, 1.0);
-	tempBox->getMaterial().setSpecularLevel(1.0f);
-	tempBox->getMaterial().setGlossiness(1.0);
-	tempBox->getMaterial().setRefract(0.5f);
-	tempBox->getMaterial().setIndexOfRefraction(1.66f);
-	this->sceneObjects.push_back(tempBox);
+	////Box *tempBox = new Box(Vector3D(-10.0,-1.0,-10.0),Vector3D(10.0,0.0,10.0));
+	//tempBox = new Box(Vector3D(0.0,1.0,0.0), 1.0, 1.0, 1.0);
+	//tempBox->getMaterial().setSpecularLevel(1.0f);
+	//tempBox->getMaterial().setGlossiness(1.0);
+	//tempBox->getMaterial().setRefract(0.5f);
+	//tempBox->getMaterial().setIndexOfRefraction(1.66f);
+	//this->sceneObjects.push_back(tempBox);
 
 	//Plane *tempPlane = new Plane(Vector3D(0,1,0), Vector3D(0,0,0));
 	//tempPlane->getMaterial().getDiffuseColor().g = 0.0;

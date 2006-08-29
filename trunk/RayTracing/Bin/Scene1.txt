@@ -1,23 +1,29 @@
+#raytracer
+width = 300
+height = 300
+tiny = 0.11
+znear = 0.22
+zfar = 100.01
 
-# RayTacer
-width = 200
-height = 200
-tiny = 0.1
-znear = 0.2
-zfar = 100.0
-
-# Scene
+#scene
 ambientalLight = 0.3 0.3 0.3
-	
-# Box
-center = 0.0 0.0 0.0
-dimensions = 10.0 10.0 10.0
 
-# Sphere
+#camera
+v = 0.0 1.0 0.0
+n = 0.0 0.0 1.0
+hx = 0.5
+hy = 0.5
+d = 1.0
+	
+#box
+bl = 0.0 0.0 0.0
+bh = 10.0 10.0 10.0
+
+#sphere
 center = 0.0 0.0 0.0
 radius = 5.0
 
-# OmniLight
+#omnilight
 center = 0.0 0.0 0.0
 color = 1.0 1.0 1.0
 intensity = 1.0

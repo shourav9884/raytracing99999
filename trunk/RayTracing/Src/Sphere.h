@@ -13,6 +13,12 @@ private:
 	Vector2D getTextureUVCoordinates( const Vector3D& aIntersectionPoint);
 
 public:
+	inline void setRadius( float aRadius )
+	{
+		this->radius = aRadius;
+	}
+
+public:
 	Sphere( void );
 	Sphere( float aRadius, const Vector3D &aPosition = Vector3D(Vector3D::ZERO) );
 

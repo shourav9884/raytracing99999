@@ -273,6 +273,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Src\SceneLoader.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Src\SceneObject.cpp"
 				>
 			</File>
@@ -395,6 +399,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Src\SceneLoader.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Src\SceneObject.h"
 				>
 			</File>
@@ -437,7 +445,7 @@
 			Name="Scenes"
 			>
 			<File
-				RelativePath="..\Scene1.txt"
+				RelativePath=".\Bin\Scene1.txt"
 				>
 			</File>
 		</Filter>

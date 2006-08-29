@@ -12,10 +12,6 @@ private:
 	Scene scene;
 	CameraController cameraController;
 
-	// Resolucao da imagem final
-	int width;
-	int height;
-
 	// Buffer onde a imagem final será armazenada
 	FrameBuffer *frameBuffer;
 
