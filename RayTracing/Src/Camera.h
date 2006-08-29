@@ -12,7 +12,7 @@ private:
 
 	Base base; // Base do sistema de coordenadas que será gerado
 
-	const float d; // Distancia focal
+	float d; // Distancia focal
 
 	float Hx; // Hx * 2 é a largura do plano de projecao
 	float Hy; // Hy * 2 é a altura do plano de projecao
@@ -23,14 +23,29 @@ public:
 		return this->d;
 	}
 
+	inline void setD( float aD)
+	{
+		this->d = aD;
+	}
+
 	inline float getHx() const
 	{
 		return this->Hx;
 	}
 
+	inline void setHx( float aHx )
+	{
+		this->Hx = aHx;
+	}
+
 	inline float getHy() const
 	{
 		return this->Hy;
+	}
+
+	inline void setHy( float aHy )
+	{
+		this->Hy = aHy;
 	}
 
 	inline void setV( Vector3D &aVector )

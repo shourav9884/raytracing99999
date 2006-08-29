@@ -33,6 +33,16 @@ public:
 		return this->sceneLights;
 	}
 
+	void addObject3D( Object3D *aObject3D )
+	{
+		this->sceneObjects.push_back( aObject3D );
+	}
+
+	void addLight( Light *aLight )
+	{
+		this->sceneLights.push_back( aLight );
+	}
+
 	inline Camera &getCamera( )
 	{
 		return this->camera;
@@ -41,5 +51,10 @@ public:
 	inline ColorRGBf &getAmbientLight()
 	{
 		return this->ambientLight;
+	}
+
+	inline void setAmbientLight( const ColorRGBf &aAmbientLight )
+	{
+		this->ambientLight = aAmbientLight;
 	}
 };

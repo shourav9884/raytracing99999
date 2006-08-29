@@ -8,14 +8,13 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Quaternion.h"
+#include "SceneLoader.h"
 
 #include <cstdio>
 using namespace std;
 
 AppRoot::AppRoot(void)
-: width(200), 
-height(200), 
-pressedKeyFORWARD(false),
+: pressedKeyFORWARD(false),
 pressedKeyBACKWARD(false),
 pressedKeyLEFT(false),
 pressedKeyRIGHT(false),
@@ -24,7 +23,6 @@ pressedKeyDOWN(false),
 pressedButtonLEFT(false),
 pressedButtonRIGHT(false)
 {
-	this->frameBuffer = new FrameBuffer(this->width, this->height);
 }
 
 AppRoot::~AppRoot(void)
@@ -33,14 +31,19 @@ AppRoot::~AppRoot(void)
 }
 
 void AppRoot::init( int argc, char **args )
-{
+{	
 	this->rayTracer.init( );
 	this->scene.init( );
+	
+	//SceneLoader::loadScene("Scene1.txt", *this, this->rayTracer, this->scene);
+	
 	this->cameraController.setCamera( &this->scene.getCamera() );
+	
+	this->frameBuffer = new FrameBuffer(this->rayTracer.getWidth(), this->rayTracer.getHeight());
 
 	// Inicializa o GLUT (sistema de janelas)
 	GLUTHandler::setListener( this );
-	GLUTHandler::startGLUT( argc, args, this->width, this->height);
+	GLUTHandler::startGLUT( argc, args, this->rayTracer.getWidth(), this->rayTracer.getHeight());
 	////////////////////////////////////////////////////////////
 	// ESTE TRECHO SÓ É ALCANCADO QUANDO O PROGRAMA É FINALIZADO
 	////////////////////////////////////////////////////////////
@@ -49,7 +52,7 @@ void AppRoot::init( int argc, char **args )
 void AppRoot::idleFunc( double deltaTime )
 {
 	// Executa ray tracing
-	this->rayTracer.executeRayTracer( this->width, this->height, this->frameBuffer, &scene );
+	this->rayTracer.executeRayTracer( this->frameBuffer, &scene );
 
 	//Filter::scanImage( this->frameBuffer->colorBuffer, this->width, this->height, 3);
 
@@ -114,7 +117,7 @@ void AppRoot::keyboardFunc(unsigned char key, int x, int y)
 	//printf("Pressed = %c\n", key);
 }
 
-void AppRoot::keyboardUpFunc(unsigned char key, int x, int y)
+void AppRoot::keyboardUpFunc( unsigned char key, int x, int y )
 {
 	switch(key)
 	{

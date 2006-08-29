@@ -11,7 +11,7 @@
 using namespace std;
 
 RayTracer::RayTracer(void)
-: zNear(0.0), zFar(50.0), tiny(0.1)
+: zNear(0.0), zFar(50.0), tiny(0.1), width(200), height(200)
 {
 }
 
@@ -21,11 +21,9 @@ RayTracer::~RayTracer(void)
 
 void RayTracer::init( )
 {
-	// Carregar a cena...
-	this->scene.init();	
 }
 
-void RayTracer::executeRayTracer( int aWidth, int aHeight, FrameBuffer* aFrameBuffer, Scene* aScene )
+void RayTracer::executeRayTracer( FrameBuffer* aFrameBuffer, Scene* aScene )
 {
 	Camera &camera = aScene->getCamera();
 
@@ -36,8 +34,8 @@ void RayTracer::executeRayTracer( int aWidth, int aHeight, FrameBuffer* aFrameBu
 	float d = camera.getD();
 
 	// Atributos da camera trabalhados
-	double incrementXt = 1.0/(aWidth-1);
-	double incrementYt = 1.0/(aHeight-1);
+	double incrementXt = 1.0/(this->width-1);
+	double incrementYt = 1.0/(this->height-1);
 
 	double currentXt = 0.0;
 	double currentYt = 0.0;
@@ -68,11 +66,11 @@ void RayTracer::executeRayTracer( int aWidth, int aHeight, FrameBuffer* aFrameBu
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //	for( int i = aHeight-1; i >= 0; i-- ) // Tem que ser subtraindo pois OPENGL desenha
-	for( int i = 0; i < aHeight; i++ )    // os pixel DE BAIXO PARA CIMA
+	for( int i = 0; i < this->height; i++ )    // os pixel DE BAIXO PARA CIMA
 	{   
 		currentXt = 0.0;
 
-		for( int j = 0; j < aWidth; j++ )
+		for( int j = 0; j < this->width; j++ )
 		{	
 			//Vector3D xPoint = upLeft + (horizontal * currentXt);
 			Vector3D xPoint = downLeftPoint + (horizontal * currentXt);
@@ -83,8 +81,8 @@ void RayTracer::executeRayTracer( int aWidth, int aHeight, FrameBuffer* aFrameBu
 
 			Fragment fragment = this->traceRay( ray, aScene , 3);
 			
-			aFrameBuffer->colorBuffer[(aWidth*i) + j] = fragment.color;
-			aFrameBuffer->zBuffer[(aWidth*i) + j] = fragment.zValue;
+			aFrameBuffer->colorBuffer[(this->width*i) + j] = fragment.color;
+			aFrameBuffer->zBuffer[(this->width *i) + j] = fragment.zValue;
 
 			currentXt += incrementXt;
 		}
