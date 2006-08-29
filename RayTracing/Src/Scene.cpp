@@ -25,11 +25,11 @@ void Scene::init( )
 	Box *tempBox = new Box(Vector3D(0.0,-3.0,3.0), 10.0, 5.0, 10.0);
 	tempBox->getMaterial().setSpecularLevel(1.0f);
 	tempBox->getMaterial().setGlossiness(1.0);
-	Texture *tempImage = new Texture("images/cobblestonesDiffuse.tga", Texture::BILINEAR);
+	Texture *tempImage = new Texture("images/cobblestonesDiffuse.png", Texture::BILINEAR);
 	tempBox->getMaterial().setDiffuseMap(tempImage);
 	tempBox->getMaterial().setAmbientMap(tempImage);
-	tempBox->getMaterial().setNormalMap(new Texture("images/cobblestonesNormal.tga", Texture::BILINEAR));
-	tempBox->getMaterial().setSpecularMap(new Texture("images/cobblestonesDepth.tga", Texture::BILINEAR));
+	tempBox->getMaterial().setNormalMap(new Texture("images/cobblestonesNormal.png", Texture::BILINEAR));
+	tempBox->getMaterial().setSpecularMap(new Texture("images/cobblestonesSpecular.png", Texture::BILINEAR));
 	this->sceneObjects.push_back(tempBox);
 
 	////Box *tempBox = new Box(Vector3D(-10.0,-1.0,-10.0),Vector3D(10.0,0.0,10.0));

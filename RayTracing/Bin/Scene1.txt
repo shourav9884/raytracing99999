@@ -2,11 +2,11 @@
 width = 300
 height = 300
 tiny = 0.11
-znear = 0.22
-zfar = 100.01
+znear = 0.33
+zfar = 22.01
 
 #scene
-ambientalLight = 0.3 0.3 0.3
+ambientalLight = 0.5 0.5 0.5
 
 #camera
 v = 0.0 1.0 0.0
@@ -17,17 +17,17 @@ d = 1.0
 	
 #box
 bl = 0.0 0.0 0.0
-bh = 10.0 10.0 10.0
+bh = 5.0 5.0 5.0
 
 #sphere
-center = 0.0 0.0 0.0
+center = 0.0 10.0 0.0
 radius = 5.0
 
 #omnilight
-center = 0.0 0.0 0.0
+center = 0.0 20.0 0.0
 color = 1.0 1.0 1.0
 intensity = 1.0
-castShadow = true/false
+castShadow = true
 
 
 # Material
