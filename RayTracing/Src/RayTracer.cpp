@@ -157,10 +157,10 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 			// Se estiver virada para o lado da luz
 			if(coeficient > 0.0)
 			{
-				const ColorRGBf &lightColor = currentLight->getColor();
+				ColorRGBf lightResult = currentLight->getColor() * currentLight->getIntensity();
 
 				// Cor DIFUSA (tem que adicionar o resultado de cada Light)
-				Id = Id + material.getDiffuseResult(aIntersectionResult.textureUVCoordinates) * lightColor * static_cast<float>(coeficient);
+				Id = Id + material.getDiffuseResult(aIntersectionResult.textureUVCoordinates) * lightResult * static_cast<float>(coeficient);
 
 				// Cor SPACULAR (tem que adicionar o resultado de cada Light)
 				Vector3D R = (aIntersectionResult.normal * 2 * lightVector.dotProduct(aIntersectionResult.normal)) - lightVector;
@@ -173,9 +173,13 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 
 				double specularCoeficiente = V.dotProduct(R);
 
+				// Fator que suaviza o specular quando o raio refletido tende a fazer 90 graus com o vetor normal
+				float softenCoeficient = R.dotProduct(aIntersectionResult.normal);
+				softenCoeficient = static_cast<float>(pow(softenCoeficient, material.getSoften()));
+
 				if(specularCoeficiente  > 0)
 				{
-					Is = Is + (material.getSpecularResult(aIntersectionResult.textureUVCoordinates) * lightColor * material.getSpecularLevel() * static_cast<float>(pow(specularCoeficiente, material.getGlossiness())));
+					Is = Is + (material.getSpecularResult(aIntersectionResult.textureUVCoordinates) * lightResult * material.getSpecularLevel() * static_cast<float>(pow(specularCoeficiente, material.getGlossiness()))) * softenCoeficient;
 				}
 			}
 		}

@@ -32,10 +32,10 @@ AppRoot::~AppRoot(void)
 
 void AppRoot::init( int argc, char **args )
 {	
-	this->rayTracer.init( );
-	this->scene.init( );
+	//this->rayTracer.init( );
+	//this->scene.init( );
 	
-	//SceneLoader::loadScene("Scene1.txt", *this, this->rayTracer, this->scene);
+	SceneLoader::loadScene("Scene1.txt", *this, this->rayTracer, this->scene);
 	
 	this->cameraController.setCamera( &this->scene.getCamera() );
 	
@@ -60,16 +60,16 @@ void AppRoot::idleFunc( double deltaTime )
 
 	this->handleKeyboardInputs( deltaTime );
 
-	/////////////////////////////////////////////////////////////////////////////////////
-	// Lixo
-	////////////////////////////////////////////////////////////////////////////////////
-	static float angle = 0;
-	angle += 0.1;
-	float alplitude = 8;
+	///////////////////////////////////////////////////////////////////////////////////////
+	//// Lixo
+	//////////////////////////////////////////////////////////////////////////////////////
+	//static float angle = 0;
+	//angle += 0.1;
+	//float alplitude = 15;
 
-	Light * light =  scene.getSceneLights().at(0);
-	light->setWorldPosition(Vector3D(alplitude*sin(angle),alplitude*cos(angle),3));	
-	/////////////////////////////////////////////////////////////////////////////////////
+	//Light * light =  scene.getSceneLights().at(0);
+	//light->setWorldPosition(Vector3D(alplitude*sin(angle),alplitude*cos(angle),3));	
+	///////////////////////////////////////////////////////////////////////////////////////
 }
 
 void AppRoot::handleKeyboardInputs( double deltaTime )
