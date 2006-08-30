@@ -33,7 +33,7 @@ public:
 		return result;
 	}
 
-	inline ColorRGBf operator *( float aValue )
+	inline ColorRGBf operator *( float aValue ) const
 	{
 		ColorRGBf result;
 

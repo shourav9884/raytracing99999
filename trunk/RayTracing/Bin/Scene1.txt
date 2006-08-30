@@ -1,12 +1,12 @@
 #raytracer
 width = 300
 height = 300
-tiny = 0.11
-znear = 0.33
-zfar = 22.01
+tiny = 0.02
+znear = 0.1
+zfar = 100.01
 
 #scene
-ambientalLight = 0.5 0.5 0.5
+ambientalLight = 0.5 0.5 0.9
 
 #camera
 v = 0.0 1.0 0.0
@@ -16,42 +16,43 @@ hy = 0.5
 d = 1.0
 	
 #box
-bl = 0.0 0.0 0.0
-bh = 5.0 5.0 5.0
+bl = -7.0 -8.0 -7.0
+bh = 7.0 -1.0 7.0
+diffuseColor = 0.5 0.5 0.5
+diffuseMap = images/cobblestonesDiffuse.png bilinear
+specularColor = 0.5 0.5 0.5
+specularLevel = 1.0
+glossiness = 10.0
+soften = 0.5
+specularMap = images/cobblestonesSpecular.png bilinear
+ambientColor = 0.2 0.2 0.2
+ambientMap = images/cobblestonesDiffuse.png bilinear
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 1.66
+normalMap = images/cobblestonesNormal.png bilinear
 
 #sphere
-center = 0.0 10.0 0.0
+center = 0.0 5.0 0.0
 radius = 5.0
+diffuseColor = 0.3 0.3 0.3
+specularColor = 0.5 0.5 0.5
+specularLevel = 2.0
+glossiness = 5.0
+soften = 1.0
+ambientColor = 0.4 0.4 0.4
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 1.66
 
 #omnilight
-center = 0.0 20.0 0.0
+center = 10.0 10.0 10.0
 color = 1.0 1.0 1.0
 intensity = 1.0
 castShadow = true
 
-
-# Material
-// Diffusa
-diffuseColor 0.5 0.5 0.5
-diffuseMap "xxx.jpg"
-
-// Specular
-specularColor 0.5 0.5 0.5
-specularLevel 1.0
-glossiness 10.0
-soften 0.5
-specularMap "xxx.jog"
-
-// Ambiental
-ambientColor 0.2 0.2 0.2
-ambientMap "xxx.jpg"
-
-// Reflexao
-reflect 0.5
-
-// Refracao
-refract 0.2
-indexOfRefraction 1.66
-
-// Normal map
-normalMap "xxx.jpg"
+#omnilight
+center = -10.0 10.0 -10.0
+color = 1.0 0.0 0.0
+intensity = 0.7
+castShadow = false

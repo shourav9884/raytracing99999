@@ -17,13 +17,16 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 	{
 		// Buffers que armazenam os valores lidos do arquivo
 		string stringValue;
+		string stringValue2;
 		int intValue;
 		float floatValue1;
 		float floatValue2;
 		float floatValue3;
-		bool boolValue;
 
-		for(int i = 0; i < 7; i++)
+		//for(int i = 0; i < 7; i++)
+
+		bool temp = true;
+		while( temp = !fs.eof() )
 		{
 			string readLine;
 			
@@ -80,6 +83,74 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
 				tempBox->setBh( Vector3D(floatValue1, floatValue2, floatValue3) );
 
+				// Material
+				Material &tempMaterial = tempBox->getMaterial();
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setDiffuseColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> stringValue >> stringValue2;
+				if( stringValue != string("null") )
+				{
+					if( stringValue2 == string("bilinear") )
+						tempMaterial.setDiffuseMap( new Texture(stringValue.c_str(), Texture::BILINEAR) );
+					else
+						tempMaterial.setDiffuseMap( new Texture(stringValue.c_str(), Texture::NEAREST) );
+				}
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setSpecularColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setSpecularLevel( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setGlossiness( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setSoften( floatValue1 );
+
+				fs >> stringValue >> stringValue >> stringValue >> stringValue2;
+				if( stringValue != string("null") )
+				{
+					if( stringValue2 == string("bilinear") )
+						tempMaterial.setSpecularMap( new Texture(stringValue.c_str(), Texture::BILINEAR) );
+					else
+						tempMaterial.setSpecularMap( new Texture(stringValue.c_str(), Texture::NEAREST) );
+				}
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setAmbientColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> stringValue >> stringValue2;
+				if( stringValue != string("null") )
+				{
+					if( stringValue2 == string("bilinear") )
+						tempMaterial.setAmbientMap( new Texture(stringValue.c_str(), Texture::BILINEAR) );
+					else
+						tempMaterial.setAmbientMap( new Texture(stringValue.c_str(), Texture::NEAREST) );
+				}
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setReflect( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setRefract( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setIndexOfRefraction( floatValue1 );
+
+
+				fs >> stringValue >> stringValue >> stringValue >> stringValue2;
+				if( stringValue != string("null") )
+				{
+					if( stringValue2 == string("bilinear") )
+						tempMaterial.setNormalMap( new Texture(stringValue.c_str(), Texture::BILINEAR) );
+					else
+						tempMaterial.setNormalMap( new Texture(stringValue.c_str(), Texture::NEAREST) );
+				}
+
+
 				aScene.addObject3D( tempBox );
 			}
 			else if( readLine == string("#sphere") )
@@ -91,6 +162,37 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 				
 				fs >> stringValue >> stringValue >> floatValue1 ;
 				tempSphere->setRadius( floatValue1 );
+
+				// Material
+				Material &tempMaterial = tempSphere->getMaterial();
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setDiffuseColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setSpecularColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setSpecularLevel( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setGlossiness( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setSoften( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setAmbientColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setReflect( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setRefract( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setIndexOfRefraction( floatValue1 );
+
 
 				aScene.addObject3D( tempSphere );
 			}
@@ -107,8 +209,11 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 				fs >> stringValue >> stringValue >> floatValue1 ;
 				tempOmniLight->setIntensity( floatValue1 );
 
-				fs >> stringValue >> stringValue >> boolValue ;
-				tempOmniLight->setCastShadow(boolValue);
+				fs >> stringValue >> stringValue >> stringValue ;
+				bool result = true;
+				if( stringValue == string("false") )
+					result = false;
+				tempOmniLight->setCastShadow(result);
 
 				aScene.addLight( tempOmniLight );
 			}
