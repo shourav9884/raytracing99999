@@ -1,55 +1,49 @@
 #include "Filter.h"
 
-void Filter::getMaskData( ColorRGBf *aBuffer, ColorRGBf *aImage, int aXPixel, int aYPixel, int aWidth, int aHeight, int aMaskSize )
+#include <cmath>
+using namespace std;
+
+Filter::Filter( int aMaskSize, int aWidth, int aHeight )
+: maskSize(aMaskSize), width(aWidth), height(aHeight)
 {
-	int offset = aMaskSize/2;
+	this->imageBuffer = new ColorRGBf[aWidth*aHeight];
+	this->maskBuffer = new ColorRGBf[this->maskSize*this->maskSize];
 
-	for( int x = 0; x < aMaskSize; x++ )		
+	// Preenche os valores da mascara
+	this->mask = new float[this->maskSize*this->maskSize];
+	for( int x = 0; x < this->maskSize; x ++ )
 	{
-		for( int y = 0; y < aMaskSize; y++ )
+		for( int y = 0; y < this->maskSize; y ++ )
 		{
-			int imageX = (aXPixel-offset+x);
-			int imageY = (aYPixel-offset+y);
-
-			if(imageX < 0)
-				imageX = 0;
-			else if(imageX >= aWidth)
-				imageX = aWidth-1;
-			if(imageY < 0)
-				imageY = 0;
-			else if(imageY >= aHeight)
-				imageY = aHeight-1;
-
-			aBuffer[x + y*aMaskSize] = aImage[ imageX + imageY*aWidth];
+			//this->mask[x + y*this->maskSize] = sin() + sin();
 		}
 	}
+
 }
 
-void Filter::scanImage( ColorRGBf *aImage, int aWidth, int aHeight, int aMaskSize )
+ColorRGBf *Filter::scanImage( ColorRGBf *aImage )
 {
-	ColorRGBf *maskData = new ColorRGBf[aMaskSize*aMaskSize];
-
-	for( int y = 0; y < aHeight; y++ )
+	for( int y = 0; y < this->height; y++ )
 	{
 		
-		for( int x = 0; x < aWidth; x++ )
+		for( int x = 0; x < this->width; x++ )
 		{
 			
-			Filter::getMaskData(maskData, aImage, x, y, aWidth, aHeight, aMaskSize);
+			Filter::getMaskData(this->maskBuffer, aImage, x, y, this->width, this->height, this->maskSize);
 
 			ColorRGBf tempPixelResult(0,0,0);
 
 			// Faz a convolucao
-			for( int yMask = 0; yMask < aMaskSize; yMask++ )
+			for( int yMask = 0; yMask < this->maskSize; yMask++ )
 			{
-				for( int xMask = 0; xMask < aMaskSize; xMask++ )	
+				for( int xMask = 0; xMask < this->maskSize; xMask++ )	
 				{
-					tempPixelResult = tempPixelResult + maskData[xMask + yMask*aMaskSize];
+					tempPixelResult = tempPixelResult + this->maskBuffer[xMask + yMask*this->maskSize];
 				}
 			}
-			aImage[x + y*aWidth] = tempPixelResult/static_cast<float>(aMaskSize*aMaskSize);
+			this->imageBuffer[x + y*this->width] = tempPixelResult/static_cast<float>(this->maskSize*this->maskSize);
 		}
 	}
 
-	delete maskData;
+	return this->imageBuffer;
 }

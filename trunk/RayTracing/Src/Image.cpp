@@ -3,26 +3,26 @@
 #include <string>
 using namespace std;
 
-bool Image::DevILInited = false;
+bool Image::DevILInitialized = false;
 ILuint Image::DevILImageName = 0; // Variavel que guardara o identificador gerado pelo devil
 
 Image::Image(void)
 {
-	if( !Image::DevILInited )
+	if( !Image::DevILInitialized )
 	{
 		ilInit();
 		ilGenImages(1, &DevILImageName);
-		Image::DevILInited = true;
+		Image::DevILInitialized = true;
 	}
 }
 
 Image::Image( const char *aFileName )
 {
-	if( !Image::DevILInited )
+	if( !Image::DevILInitialized )
 	{
 		ilInit();
 		ilGenImages(1, &Image::DevILImageName);
-		Image::DevILInited = true;
+		Image::DevILInitialized = true;
 	}
 
 	ilBindImage(Image::DevILImageName);

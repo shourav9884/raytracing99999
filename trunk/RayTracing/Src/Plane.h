@@ -16,9 +16,9 @@ private:
 	Vector2D getTextureUVCoordinates( const Vector3D& aIntersectionPoint);
 
 public:
-	Plane(void);
+	Plane( );
 	Plane( const Vector3D &aVector, const Vector3D &aPoint );
-	~Plane(void);
+	~Plane( );
 
 	double checkIntersection( const Ray& aRay );
 
@@ -36,5 +36,10 @@ public:
 	inline const Vector3D &getVector( ) const
 	{
 		return this->vector;
+	}
+
+	inline void setVector( const Vector3D &aVector )
+	{
+		this->vector = aVector;
 	}
 };

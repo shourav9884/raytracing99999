@@ -27,6 +27,13 @@ private:
 	// Resolução
 	int width;
 	int height;
+
+	// Quantidade maxima de recursoes que o algoritmo pode fazer
+	int recursionLevel;
+
+
+	// Cor que será ulilizada para preencher o backGround
+	ColorRGBf clearColor;
 	
 public:
 	RayTracer( void );
@@ -72,6 +79,16 @@ public:
 	void setTiny( double aTiny )
 	{
 		this->tiny = aTiny;
+	}
+
+	void setClearColor( const ColorRGBf &aClearColor )
+	{
+		this->clearColor = aClearColor;
+	}
+
+	void setRecursionLevel( int aRecursionLevel )
+	{
+		this->recursionLevel = aRecursionLevel;
 	}
 
 };

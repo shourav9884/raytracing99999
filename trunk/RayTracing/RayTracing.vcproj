@@ -445,7 +445,27 @@
 			Name="Scenes"
 			>
 			<File
+				RelativePath=".\Bin\initialScene.txt"
+				>
+			</File>
+			<File
 				RelativePath=".\Bin\Scene1.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Bin\Scene2.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Bin\Scene3.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Bin\Scene4.txt"
+				>
+			</File>
+			<File
+				RelativePath=".\Bin\Scene5.txt"
 				>
 			</File>
 		</Filter>

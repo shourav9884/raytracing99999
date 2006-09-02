@@ -4,6 +4,7 @@
 #include "CameraController.h"
 #include "ColorRGBf.h"
 #include "FrameBuffer.h"
+#include "Filter.h"
 
 class AppRoot
 {
@@ -11,6 +12,7 @@ private:
 	RayTracer rayTracer;
 	Scene scene;
 	CameraController cameraController;
+	Filter *filter;
 
 	// Buffer onde a imagem final será armazenada
 	FrameBuffer *frameBuffer;
@@ -24,6 +26,8 @@ private:
 	
 	bool pressedKeyFORWARD, pressedKeyBACKWARD, pressedKeyLEFT, pressedKeyRIGHT, 
 		 pressedKeyUP, pressedKeyDOWN;
+
+	float velocity;
 	///////////////////////////////////////////////////////////////////////////////////
 	
 	///////////////////////////////////////////////////////////////////////////////////

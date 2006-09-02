@@ -1,0 +1,127 @@
+#raytracer
+width = 200
+height = 200
+tiny = 0.00001
+znear = 0.1
+zfar = 100.01
+clearColor = 0.3 0.3 0.3
+recursionLevel = 3
+
+#scene
+ambientalLight = 0.5 0.5 0.4
+
+#camera
+position = 0.0 0.0 -10.0
+v = 0.0 1.0 0.0
+n = 0.0 0.0 1.0
+hx = 0.8
+hy = 0.8
+d = 1.0
+
+#plane
+point = -6.0 0.0 0.0
+normalVector = 1.0 0.0 0.0
+diffuseColor = 0.8 0.0 0.0
+specularColor = 0.5 0.5 0.5
+specularLevel = 0.5
+glossiness = 5.0
+soften = 1.0
+ambientColor = 0.4 0.4 0.4
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 2.00
+#plane
+point = 6.0 0.0 0.0
+normalVector = -1.0 0.0 0.0
+diffuseColor = 0.0 0.0 0.8
+specularColor = 0.5 0.5 0.5
+specularLevel = 0.5
+glossiness = 5.0
+soften = 1.0
+ambientColor = 0.4 0.4 0.4
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 2.00
+
+
+
+
+#plane
+point = 0.0 -1.0 0.0
+normalVector = 0.0 1.0 0.0
+diffuseColor = 0.5 0.5 0.5
+specularColor = 0.5 0.5 0.5
+specularLevel = 0.5
+glossiness = 5.0
+soften = 1.0
+ambientColor = 0.4 0.4 0.4
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 2.00
+#plane
+point = 0.0 10.0 0.0
+normalVector = 0.0 -1.0 0.0
+diffuseColor = 0.5 0.5 0.5
+specularColor = 0.5 0.5 0.5
+specularLevel = 0.5
+glossiness = 5.0
+soften = 1.0
+ambientColor = 0.4 0.4 0.4
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 2.00
+
+
+
+#plane
+point = 0.0 0.0 7.0
+normalVector = 0.0 0.0 -1.0
+diffuseColor = 0.5 0.5 0.5
+specularColor = 0.5 0.5 0.5
+specularLevel = 0.5
+glossiness = 5.0
+soften = 1.0
+ambientColor = 0.4 0.4 0.4
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 2.00
+
+
+#sphere
+center = 0.0 2.0 0.0
+radius = 3.0
+diffuseColor = 0.7 1.0 0.9
+specularColor = 1.0 1.0 1.0
+specularLevel = 1.0
+glossiness = 5.0
+soften = 1.0
+ambientColor = 0.7 1.0 0.9
+reflect = 0.0
+refract = 0.8
+indexOfRefraction = 1.23
+#sphere
+center = 3.0 1.0 -4.0
+radius = 1.5
+diffuseColor = 0.6 0.6 0.6
+specularColor = 1.0 1.0 1.0
+specularLevel = 1.5
+glossiness = 10.0
+soften = 1.0
+ambientColor = 0.6 0.6 0.6
+reflect = 0.5
+refract = 0.0
+indexOfRefraction = 1.33
+
+
+#omnilight
+center = 0.0 8.0 -8.0
+color = 1.0 1.0 1.0
+intensity = 1.0
+castShadow = true
+
+
+#omnilight
+center = 0.0 8.0 8.0
+color = 1.0 1.0 1.0
+intensity = 0.6
+castShadow = false
