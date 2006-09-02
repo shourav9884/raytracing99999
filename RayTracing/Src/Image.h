@@ -13,7 +13,7 @@ class Image
 {
 	// Membros estaticos para o DevIL
 private:
-	static bool DevILInited;
+	static bool DevILInitialized;
 	static ILuint DevILImageName;
 
 private:

@@ -10,8 +10,17 @@ using namespace std;
 
 void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer &aRayTracer, Scene &aScene)
 {
+	// Pega o nome do arquivo que contem a cena
+	fstream fs0;
+	fs0.open("initialScene.txt", fstream::in);
+
+	string fileName;
+	fs0 >> fileName;
+	fs0.close();
+
+	// Carrega os dados da cena	
 	fstream fs;
-	fs.open(aFilename, fstream::in);
+	fs.open(fileName.c_str(), fstream::in);
 
 	if( fs.is_open() )
 	{
@@ -25,7 +34,7 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 
 		//for(int i = 0; i < 7; i++)
 
-		bool temp = true;
+		bool temp = fs.eof();
 		while( temp = !fs.eof() )
 		{
 			string readLine;
@@ -48,6 +57,12 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 
 				fs >> stringValue >> stringValue >> floatValue1;
 				aRayTracer.setZFar( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				aRayTracer.setClearColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> intValue;
+				aRayTracer.setRecursionLevel( intValue );
 			}
 			else if( readLine == string("#scene") )
 			{
@@ -57,6 +72,9 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 			else if( readLine == string("#camera") )
 			{
 				Camera &tempCamera = aScene.getCamera();
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempCamera.setWorldPosition( Vector3D(floatValue1, floatValue2, floatValue3) );
 
 				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
 				tempCamera.setV( Vector3D(floatValue1, floatValue2, floatValue3) );
@@ -195,6 +213,48 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 
 
 				aScene.addObject3D( tempSphere );
+			}
+			else if( readLine == string("#plane") )
+			{
+				Plane *tempPlane = new Plane;
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempPlane->setWorldPosition( Vector3D(floatValue1, floatValue2, floatValue3) );
+				
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempPlane->setVector( Vector3D(floatValue1, floatValue2, floatValue3) );
+
+				// Material
+				Material &tempMaterial = tempPlane->getMaterial();
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setDiffuseColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setSpecularColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setSpecularLevel( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setGlossiness( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setSoften( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
+				tempMaterial.setAmbientColor( ColorRGBf(floatValue1, floatValue2, floatValue3) );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setReflect( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setRefract( floatValue1 );
+
+				fs >> stringValue >> stringValue >> floatValue1;
+				tempMaterial.setIndexOfRefraction( floatValue1 );
+
+				aScene.addObject3D( tempPlane );
 			}
 			else if( readLine == string("#omnilight") )
 			{

@@ -70,7 +70,7 @@ double Box::checkIntersection( const Ray& aRay )
 				Tnear = t1;
 
 				// Quando qual dos planos foi intersectado
-				if(swaped)
+				if( swaped )
 					this->planeIntersected = &this->pairsOfPlanes[i].p2;
 				else
 					this->planeIntersected = &this->pairsOfPlanes[i].p1;

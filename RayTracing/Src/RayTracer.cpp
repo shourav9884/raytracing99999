@@ -11,7 +11,7 @@
 using namespace std;
 
 RayTracer::RayTracer(void)
-: zNear(0.0), zFar(50.0), tiny(0.1), width(200), height(200)
+: zNear(0.0), zFar(50.0), tiny(0.1), width(200), height(200), clearColor(0.0f,0.0f,0.0f), recursionLevel(1)
 {
 }
 
@@ -79,7 +79,7 @@ void RayTracer::executeRayTracer( FrameBuffer* aFrameBuffer, Scene* aScene )
 			// Raio que sai da camera (ja considerando sistema de coordenas da camera)
 			Ray ray( finalPointOnProjectionPlane - camera.getWorldPosition(), camera.getWorldPosition() );
 
-			Fragment fragment = this->traceRay( ray, aScene , 3);
+			Fragment fragment = this->traceRay( ray, aScene , this->recursionLevel);
 			
 			aFrameBuffer->colorBuffer[(this->width*i) + j] = fragment.color;
 			aFrameBuffer->zBuffer[(this->width *i) + j] = fragment.zValue;
@@ -93,7 +93,7 @@ void RayTracer::executeRayTracer( FrameBuffer* aFrameBuffer, Scene* aScene )
 RayTracer::Fragment RayTracer::traceRay( const Ray& aRay, Scene* aScene , int aRecursionCurrentLevel)
 {
 	// Equivalente ao clearcolor de OpenGL
-	ColorRGBf finalColor(0.0,0.0,0.0);
+	ColorRGBf finalColor = this->clearColor;
 
 	Fragment result = {finalColor, static_cast<float>(this->zFar) };
 
@@ -146,8 +146,8 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 		Light *currentLight = *itrLight;
 
 		// Se a sombra estiver habilitada e houver objeto projetando
-		double lightAmount =  currentLight->evaluateIlumination( aIntersectionResult.point, aScene, this->tiny);
-		if( lightAmount != 0.0 )
+		float lightAmount =  currentLight->evaluateIlumination( aIntersectionResult.point, aScene, this->tiny);
+		if( lightAmount != 0.0f )
 		{
 			Vector3D lightVector = currentLight->getWorldPosition() - aIntersectionResult.point;
 			lightVector.normalize();
@@ -157,7 +157,7 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 			// Se estiver virada para o lado da luz
 			if(coeficient > 0.0)
 			{
-				ColorRGBf lightResult = currentLight->getColor() * currentLight->getIntensity();
+				ColorRGBf lightResult = currentLight->getColor() * currentLight->getIntensity() * lightAmount;
 
 				// Cor DIFUSA (tem que adicionar o resultado de cada Light)
 				Id = Id + material.getDiffuseResult(aIntersectionResult.textureUVCoordinates) * lightResult * static_cast<float>(coeficient);
@@ -174,12 +174,18 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 				double specularCoeficiente = V.dotProduct(R);
 
 				// Fator que suaviza o specular quando o raio refletido tende a fazer 90 graus com o vetor normal
-				float softenCoeficient = R.dotProduct(aIntersectionResult.normal);
-				softenCoeficient = static_cast<float>(pow(softenCoeficient, material.getSoften()));
+				float softenCoeficient = 1.0;
+				if( material.getSoften() > 0.0 )
+				{
+					softenCoeficient = static_cast<float>(pow( R.dotProduct(aIntersectionResult.normal) , 
+						static_cast<double>(material.getSoften())));
+				}
+
+				specularCoeficiente = specularCoeficiente * softenCoeficient;
 
 				if(specularCoeficiente  > 0)
 				{
-					Is = Is + (material.getSpecularResult(aIntersectionResult.textureUVCoordinates) * lightResult * material.getSpecularLevel() * static_cast<float>(pow(specularCoeficiente, material.getGlossiness()))) * softenCoeficient;
+					Is = Is + (material.getSpecularResult(aIntersectionResult.textureUVCoordinates) * lightResult * material.getSpecularLevel() * static_cast<float>(pow(specularCoeficiente, material.getGlossiness())));
 				}
 			}
 		}
@@ -198,24 +204,48 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 
 		reflectionResult = this->traceRay(Ray(reflectedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;
 	}
+	//// Refacao
+	//float refract = material.getRefract();
+	//ColorRGBf refractionResult(0,0,0);
+	//if( refract > 0.0 && aRecursionCurrentLevel > 0 )
+	//{
+	//	Vector3D viewVector = aIntersectionResult.point - aScene->getCamera().getWorldPosition();
+	//	viewVector.normalize();
+	//	
+	//	Vector3D normalVectorInverted = aIntersectionResult.normal;
+	//	normalVectorInverted.invertDirection();
+
+	//	float indexOfRefractionRatio = 1.0f/material.getIndexOfRafraction();		
+
+	//	double cosi = normalVectorInverted.dotProduct(viewVector);
+	//	double cosj = sqrt(1.0 - pow(indexOfRefractionRatio, 2) * (1.0- pow(cosi,2)) );
+
+	//	Vector3D refractedVector = (viewVector * (1.0f/indexOfRefractionRatio)) +
+	//							   (normalVectorInverted * (cosj - (indexOfRefractionRatio * cosi)));
+	//	refractedVector.normalize();
+
+	//	refractionResult = this->traceRay(Ray(refractedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;
+	//}
 
 	// Refacao
 	float refract = material.getRefract();
 	ColorRGBf refractionResult(0,0,0);
 	if( refract > 0.0 && aRecursionCurrentLevel > 0 )
 	{
-		Vector3D viewVector = aIntersectionResult.point - aScene->getCamera().getWorldPosition();
+		Vector3D viewVector = aScene->getCamera().getWorldPosition() - aIntersectionResult.point;
+		viewVector.normalize();
 		
 		Vector3D normalVectorInverted = aIntersectionResult.normal;
-		normalVectorInverted.invertDirection();
+		//normalVectorInverted.invertDirection();
 
 		float indexOfRefractionRatio = 1.0f/material.getIndexOfRafraction();		
 
 		double cosi = normalVectorInverted.dotProduct(viewVector);
-		double cosj = sqrt(1.0 - pow(indexOfRefractionRatio, 2) * (1.0- pow(cosi,2)) );
+		double tempValue = sqrt(1.0 - (pow(indexOfRefractionRatio, 2) * (1.0 - pow(cosi,2))) );
 
-		Vector3D refractedVector = (viewVector * (1.0f/indexOfRefractionRatio)) +
-								   (normalVectorInverted * (cosj - (indexOfRefractionRatio * cosi)));
+		Vector3D refractedVector =  (normalVectorInverted * ((indexOfRefractionRatio* cosi) - tempValue)) -
+								   (viewVector * indexOfRefractionRatio);
+
 		refractedVector.normalize();
 
 		refractionResult = this->traceRay(Ray(refractedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;

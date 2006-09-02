@@ -14,11 +14,12 @@ OmniLight::OmniLight( const Vector3D &aPosition, const ColorRGBf &aColor)
 {
 }
 
-double OmniLight::evaluateIlumination( const Vector3D& aPoint, const Scene* aScene, double aTiny)
+float OmniLight::evaluateIlumination( const Vector3D& aPoint, const Scene* aScene, double aTiny)
 {
 	// Deveria ter alguma coisa aqui de decaimeno
-	double result = 1.0;
-
+	float result = 1.0;
+ 
+	// Testa se tem algum objeto entre o ponto e luz (para sombrear)
 	if( this->castShadow )
 	{
 		const vector<Object3D*> &sceneObjects = aScene->getSceneObjects();
@@ -27,7 +28,7 @@ double OmniLight::evaluateIlumination( const Vector3D& aPoint, const Scene* aSce
 		// asim pode-se calcular decaimento, utilizar o tiny corretamente, etc.
 		Vector3D rayVector = (this->worldPosition - aPoint);
 		rayVector.normalize();
-		Ray rayFromPointToLight( rayVector, aPoint);
+		Ray rayFromPointToLight( rayVector, aPoint );
 
 		double tMax = rayFromPointToLight.getTOfPoint( this->worldPosition );
 
@@ -42,7 +43,7 @@ double OmniLight::evaluateIlumination( const Vector3D& aPoint, const Scene* aSce
 
 			// Checa se o objeto intersectado esta entre a o ponto e a fonte de luz
 			// Está levando em consideracao o tiny
-			if(intersectionResult > aTiny && intersectionResult < tMax)
+			if( intersectionResult > aTiny && intersectionResult < tMax )
 			{
 				result = 0.0;
 

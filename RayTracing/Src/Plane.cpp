@@ -25,6 +25,10 @@ double Plane::checkIntersection( const Ray& aRay )
 	{
 		double denominator = aRay.vector.dotProduct(this->vector);
 
+		//// Faz com que o plano só tenha um lado (cull backface)
+		//if(denominator > 0.0)
+		//	return result;
+
 		Vector3D invertedVector = this->vector;
 		invertedVector.invertDirection();
 

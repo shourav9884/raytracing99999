@@ -21,7 +21,8 @@ pressedKeyRIGHT(false),
 pressedKeyUP(false),
 pressedKeyDOWN(false),
 pressedButtonLEFT(false),
-pressedButtonRIGHT(false)
+pressedButtonRIGHT(false),
+velocity(2.0)
 {
 }
 
@@ -41,6 +42,8 @@ void AppRoot::init( int argc, char **args )
 	
 	this->frameBuffer = new FrameBuffer(this->rayTracer.getWidth(), this->rayTracer.getHeight());
 
+	this->filter = new Filter( 2, this->rayTracer.getWidth(), this->rayTracer.getHeight() );
+
 	// Inicializa o GLUT (sistema de janelas)
 	GLUTHandler::setListener( this );
 	GLUTHandler::startGLUT( argc, args, this->rayTracer.getWidth(), this->rayTracer.getHeight());
@@ -54,7 +57,7 @@ void AppRoot::idleFunc( double deltaTime )
 	// Executa ray tracing
 	this->rayTracer.executeRayTracer( this->frameBuffer, &scene );
 
-	//Filter::scanImage( this->frameBuffer->colorBuffer, this->width, this->height, 3);
+	//GLUTHandler::drawPixels( this->filter->scanImage( this->frameBuffer->colorBuffer ));
 
 	GLUTHandler::drawPixels( this->frameBuffer->colorBuffer );
 
@@ -68,13 +71,13 @@ void AppRoot::idleFunc( double deltaTime )
 	//float alplitude = 15;
 
 	//Light * light =  scene.getSceneLights().at(0);
-	//light->setWorldPosition(Vector3D(alplitude*sin(angle),alplitude*cos(angle),3));	
+	//light->setWorldPosition(Vector3D(alplitude*sin(angle),alplitude*cos(angle),-10));	
 	///////////////////////////////////////////////////////////////////////////////////////
 }
 
 void AppRoot::handleKeyboardInputs( double deltaTime )
 {	
-	float offset = 2.0*deltaTime;
+	float offset = this->velocity*deltaTime;
 
 	// Translacoes
 	if( this->pressedKeyFORWARD )		
@@ -113,6 +116,12 @@ void AppRoot::keyboardFunc(unsigned char key, int x, int y)
 	case AppRoot::keyDOWN:
 		this->pressedKeyDOWN = true;
 		break;
+	}
+
+	// Seta a velocidade
+	if( key >= 49 && key <= 57 )
+	{
+		this->velocity = (key-48)*(key-48);
 	}
 	//printf("Pressed = %c\n", key);
 }
