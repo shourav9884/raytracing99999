@@ -12,6 +12,13 @@ private:
 	{	
 		ColorRGBf color;
 		float zValue;
+		ColorRGBf highIntensity;
+	};
+
+	struct DoubleColor
+	{
+		ColorRGBf color;
+		ColorRGBf highIntensity;
 	};
 
 private:
@@ -43,7 +50,7 @@ public:
 	
 	void executeRayTracer( FrameBuffer* aFrameBuffer, Scene* aScene );
 	RayTracer::Fragment traceRay( const Ray& aRay, Scene* aScene , int aRecursionCurrentLevel);
-	ColorRGBf shadePixel( IntersectionResult& aIntersectionResult, Object3D* aCurrentObject, Scene* aScene , int aRecursionCurrentLevel);
+	RayTracer::DoubleColor shadePixel( IntersectionResult& aIntersectionResult, Object3D* aCurrentObject, Scene* aScene , int aRecursionCurrentLevel);
 
 public:
 	int getWidth()

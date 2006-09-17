@@ -83,6 +83,7 @@ void RayTracer::executeRayTracer( FrameBuffer* aFrameBuffer, Scene* aScene )
 			
 			aFrameBuffer->colorBuffer[(this->width*i) + j] = fragment.color;
 			aFrameBuffer->zBuffer[(this->width *i) + j] = fragment.zValue;
+			aFrameBuffer->highIntensityBuffer[(this->width *i) + j] = fragment.highIntensity;
 
 			currentXt += incrementXt;
 		}
@@ -96,6 +97,9 @@ RayTracer::Fragment RayTracer::traceRay( const Ray& aRay, Scene* aScene , int aR
 	ColorRGBf finalColor = this->clearColor;
 
 	Fragment result = {finalColor, static_cast<float>(this->zFar) };
+
+	// Garante que o backgroud nãi fique com uma intensidade maior que (0,0,0)
+	result.highIntensity = ColorRGBf(0.0,0.0,0.0);
 
 	const vector<Object3D*> &sceneObjects = aScene->getSceneObjects();	
 
@@ -117,7 +121,10 @@ RayTracer::Fragment RayTracer::traceRay( const Ray& aRay, Scene* aScene , int aR
 		{
 			result.zValue = static_cast<float>(intersectionResult.t);
 
-			result.color = this->shadePixel( intersectionResult, currentObject, aScene , aRecursionCurrentLevel);
+			DoubleColor tempPixel = this->shadePixel( intersectionResult, currentObject, aScene , aRecursionCurrentLevel);
+			
+			result.color = tempPixel.color;
+			result.highIntensity = tempPixel.highIntensity;
 		}
 	}
 
@@ -127,7 +134,7 @@ RayTracer::Fragment RayTracer::traceRay( const Ray& aRay, Scene* aScene , int aR
 	return result;
 }
 
-ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object3D* aCurrentObject, Scene* aScene , int aRecursionCurrentLevel)
+RayTracer::DoubleColor RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object3D* aCurrentObject, Scene* aScene , int aRecursionCurrentLevel)
 {
 	const vector<Light*> &sceneLights = aScene->getSceneLights();	
 
@@ -204,7 +211,7 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 
 		reflectionResult = this->traceRay(Ray(reflectedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;
 	}
-	//// Refacao
+	//// Refacao (ERRADA WIKIPEDIA)
 	//float refract = material.getRefract();
 	//ColorRGBf refractionResult(0,0,0);
 	//if( refract > 0.0 && aRecursionCurrentLevel > 0 )
@@ -251,8 +258,12 @@ ColorRGBf RayTracer::shadePixel( IntersectionResult& aIntersectionResult, Object
 		refractionResult = this->traceRay(Ray(refractedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;
 	}
 
-	ColorRGBf result = ((Ia + Id + Is)*(1-reflect) + reflectionResult*reflect)*(1-refract) +
+	DoubleColor result;
+	
+	result.color = ((Ia + Id + Is)*(1-reflect) + reflectionResult*reflect)*(1-refract) +
 					   refractionResult*refract;
+
+	result.highIntensity = Is;
 
 	return result;
 }

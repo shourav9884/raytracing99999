@@ -53,6 +53,7 @@ void GLUTHandler::printFPS(double aDeltaTime)
 		char stringFPS[stringLenght];
 		sprintf_s( stringFPS, "FPS = %.3f", (1.0/deltaTimeUsed) );
 
+		glDisable(GL_TEXTURE_2D);
 		glColor3f(1,0,1);
 		glRasterPos2i(2,GLUTHandler::windowHeight-5);
 
@@ -131,11 +132,4 @@ void GLUTHandler::startGLUT( int argc, char** args, int aWidth, int aHeight )
 void GLUTHandler::setListener( AppRoot *listener )
 {
 	GLUTHandler::listener = listener;
-}
-
-void GLUTHandler::drawPixels( void* aData )
-{
-	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton( );
-
-	renderSystem.drawPixels( aData);
 }
