@@ -22,4 +22,6 @@ public: // Metodos estaticos
 public:
 	void drawPixels( void *aData );
 	void reshapeCanvas( int aWidth, int aHeight );
+
+	void drawPixelsOverBuffer( void *aData );
 };

@@ -30,5 +30,4 @@ public:
 
 	static void startGLUT( int argc, char** args, int width = 640, int height = 480 );
 	static void setListener( AppRoot *listener );
-	static void drawPixels( void* aData );
 };

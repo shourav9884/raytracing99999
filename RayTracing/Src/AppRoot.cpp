@@ -1,6 +1,7 @@
 #include "AppRoot.h"
 
 #include "GLUTHandler.h"
+#include "OGLRenderSystem.h"
 #include "Scene.h"
 
 #include "Filter.h"
@@ -59,7 +60,10 @@ void AppRoot::idleFunc( double deltaTime )
 
 	//GLUTHandler::drawPixels( this->filter->scanImage( this->frameBuffer->colorBuffer ));
 
-	GLUTHandler::drawPixels( this->frameBuffer->colorBuffer );
+	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton();
+
+	renderSystem.drawPixels( this->frameBuffer->colorBuffer );
+	//renderSystem.drawPixelsOverBuffer( this->frameBuffer->highIntensityBuffer );
 
 	this->handleKeyboardInputs( deltaTime );
 
