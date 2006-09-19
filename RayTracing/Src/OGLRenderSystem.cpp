@@ -110,7 +110,7 @@ void OGLRenderSystem::drawPixelsOverBuffer( void *aData )
 {
 	glClear( GL_ACCUM_BUFFER_BIT );
 
-	glAccum(GL_ACCUM, 0.0);
+	glAccum(GL_ACCUM, 1.0);
 
 	// Habilita a texturiazacao
 	glEnable( GL_TEXTURE_2D );
@@ -125,46 +125,48 @@ void OGLRenderSystem::drawPixelsOverBuffer( void *aData )
 	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, widthOut, heightOut, GL_RGB, GL_FLOAT, aDataOut);
 
 	//glBlendFunc( GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA );
-	glBlendFunc( GL_ONE, GL_ONE );
+	glBlendFunc( GL_ONE, GL_ZERO );
 	//glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
 
-	//float meio = this->width/2;
-	float meio = 00;
-	float jitter = 0.4;
+	int leftVertexsOffset = this->width/2;
+	int specularBloomSamples = 19;
+	float maxSpreadFactor = 0.05;
+	float specularBloomIntensity = 1.0;
 
-	for( int x = -5; x < 6; x++ )
+	// Quando a coordenada da textura deve mudar a cada camanda desenhada
+	float textureUVOffset = (2*maxSpreadFactor)/(specularBloomSamples-1);
+
+	for( int x = 0; x < specularBloomSamples; x++ )
 	{
-		for( int y = -5; y < 6; y++ )
+		for( int y = 0; y < specularBloomSamples; y++ )
 		{
-			//glClear( GL_COLOR_BUFFER_BIT );
+			// Limpa o color buffer para desenhar uma nova camanda nele
+			glClear( GL_COLOR_BUFFER_BIT );
 
-			glBegin( GL_QUADS );
+			// Desenha camada (cada camada é um plano colado com plano de projeção)
+			glBegin( GL_QUADS );				
 
-			float planeSizeOffset = meio/this->width;
+				glTexCoord2d( (0+maxSpreadFactor)-(textureUVOffset*x) + (double)leftVertexsOffset/this->width, (1+maxSpreadFactor)-(textureUVOffset*y));				
+				glVertex2f( 0 + leftVertexsOffset, 0 );
 
-			//glColor4f(0,0,1,1);
-			glTexCoord2d( 0 + planeSizeOffset, 1 );				
-			glVertex2f( 0+meio + x/jitter, 0 + y/jitter );
+				glTexCoord2d( (1+maxSpreadFactor)-(textureUVOffset*x), (1+maxSpreadFactor)-(textureUVOffset*y));		
+				glVertex2f( this->width, 0 );
 
-			//glColor4f(0,1,0,1);
-			glTexCoord2d( 1, 1 );		
-			glVertex2f( this->width + x/jitter, 0 + y/jitter );
-
-			//glColor4f(1,0,0,0.5);
-			glTexCoord2d( 1, 0 );		
-			glVertex2f( this->width + x/jitter, this->height + y/jitter );
-			
-			//glColor4f(1,0,0,0.5);
-			glTexCoord2d( 0 + planeSizeOffset, 0 );		
-			glVertex2f( 0+meio + x/jitter, this->height + y/jitter );
+				glTexCoord2d( (1+maxSpreadFactor)-(textureUVOffset*x), (0+maxSpreadFactor)-(textureUVOffset*y) );		
+				glVertex2f( this->width, this->height );
+				
+				glTexCoord2d( (0+maxSpreadFactor)-(textureUVOffset*x) + (double)leftVertexsOffset/this->width, (0+maxSpreadFactor)-(textureUVOffset*y) );		
+				glVertex2f( 0 + leftVertexsOffset, this->height );
+				
 			glEnd();
 
-			glAccum(GL_ACCUM, 0.0);
+			// Adiciona camada ao accumulation buffer
+			glAccum(GL_ACCUM, specularBloomIntensity/(specularBloomSamples*specularBloomSamples));
 		}
 	}
 
+	// Retorna imagem final que estava armazenada no accumulatio buffer para o color buffer
 	glAccum (GL_RETURN, 1.0);
-
 
 	glFlush();
 }

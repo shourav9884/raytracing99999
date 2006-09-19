@@ -11,9 +11,9 @@ recursionLevel = 3
 ambientalLight = 0.5 0.5 0.4
 
 #camera
-position = 0.0 0.0 -10.0
+position = 7.0 5.0 -10.0
 v = 0.0 1.0 0.0
-n = 0.0 0.0 1.0
+n = -0.5 -0.5 1.0
 hx = 0.8
 hy = 0.8
 d = 1.0
@@ -47,7 +47,7 @@ soften = 0.4
 ambientColor = 0.7 1.0 0.9
 reflect = 0.0
 refract = 0.8
-indexOfRefraction = 1.5
+indexOfRefraction = 1.3
 
 
 #omnilight

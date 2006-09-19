@@ -63,7 +63,7 @@ void AppRoot::idleFunc( double deltaTime )
 	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton();
 
 	renderSystem.drawPixels( this->frameBuffer->colorBuffer );
-	//renderSystem.drawPixelsOverBuffer( this->frameBuffer->highIntensityBuffer );
+	renderSystem.drawPixelsOverBuffer( this->frameBuffer->highIntensityBuffer );
 
 	this->handleKeyboardInputs( deltaTime );
 
