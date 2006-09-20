@@ -50,20 +50,25 @@ void RayTracer::executeRayTracer( FrameBuffer* aFrameBuffer, Scene* aScene )
 
 	Base &cameraBase = camera.getBase();
 
-	// Systema de coordenadas mundiais expresso em funcao do sistema de vista (como se o de vista fosse o canonico)
-	Vector3D worldOriginInViewSystem = cameraBase.changeFromCanonicalBase( Vector3D(0,0,0) - camera.getWorldPosition());		
-	Base worldBaseInViewSystem = cameraBase.changeFromCanonicalBase( Base(Vector3D(1,0,0), Vector3D(0,1,0), Vector3D(0,0,1)));
+	// Transforma os quatro pontos (quinas) do plano de projeção para o sistema de coordenadas mundial
+	upLeftPoint = cameraBase.changeToCanonicalBase(Vector3D(hx, hy, d)) + camera.getWorldPosition();
+	upRightPoint = cameraBase.changeToCanonicalBase(Vector3D(-hx, hy, d)) + camera.getWorldPosition();
+	downLeftPoint = cameraBase.changeToCanonicalBase(Vector3D(hx, -hy, d)) + camera.getWorldPosition();
+	downRightPoint = cameraBase.changeToCanonicalBase(Vector3D(-hx, -hy, d)) + camera.getWorldPosition();
 
-	upLeftPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(hx, hy, d) - worldOriginInViewSystem);
-	upRightPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(-hx, hy, d) - worldOriginInViewSystem);
-	downLeftPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(hx, -hy, d) - worldOriginInViewSystem);
-	downRightPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(-hx, -hy, d) - worldOriginInViewSystem);
+	//// Systema de coordenadas mundiais expresso em funcao do sistema de vista (como se o de vista fosse o canonico)
+	//Vector3D worldOriginInViewSystem = cameraBase.changeFromCanonicalBase( Vector3D(0,0,0) - camera.getWorldPosition());		
+	//Base worldBaseInViewSystem = cameraBase.changeFromCanonicalBase( Base(Vector3D(1,0,0), Vector3D(0,1,0), Vector3D(0,0,1)));
+
+	//upLeftPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(hx, hy, d) - worldOriginInViewSystem);
+	//upRightPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(-hx, hy, d) - worldOriginInViewSystem);
+	//downLeftPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(hx, -hy, d) - worldOriginInViewSystem);
+	//downRightPoint = worldBaseInViewSystem.changeFromCanonicalBase(Vector3D(-hx, -hy, d) - worldOriginInViewSystem);
 
 	// Vetores que serviram para computar os pontos do plano de projecao da camera
 	Vector3D horizontal = upRightPoint - upLeftPoint;
 	//Vector3D vertical = downRight - upRight;
 	Vector3D vertical = upRightPoint - downRightPoint;
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //	for( int i = aHeight-1; i >= 0; i-- ) // Tem que ser subtraindo pois OPENGL desenha
 	for( int i = 0; i < this->height; i++ )    // os pixel DE BAIXO PARA CIMA
@@ -198,9 +203,14 @@ RayTracer::DoubleColor RayTracer::shadePixel( IntersectionResult& aIntersectionR
 		}
 	}
 
+	DoubleColor result;
+	
+	// Cor difusa é garantia de ter
+	result.color = (Ia + Id + Is);
+	result.highIntensity = Is;
+
 	// Reflexao
 	float reflect = material.getReflect();
-	ColorRGBf reflectionResult(0,0,0);
 	if( reflect > 0.0 && aRecursionCurrentLevel > 0 )
 	{
 		Vector3D viewVector = aIntersectionResult.point - aScene->getCamera().getWorldPosition();
@@ -209,7 +219,10 @@ RayTracer::DoubleColor RayTracer::shadePixel( IntersectionResult& aIntersectionR
 		Vector3D reflectedVector = (aIntersectionResult.normal * 2 * viewVector.dotProduct(aIntersectionResult.normal)) - viewVector;
 		reflectedVector.normalize();
 
-		reflectionResult = this->traceRay(Ray(reflectedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;
+		Fragment tempResult = this->traceRay(Ray(reflectedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 );
+
+		result.color = (result.color * (1-reflect)) + (tempResult.color * reflect);
+		result.highIntensity = (result.highIntensity * (1-reflect)) + (tempResult.highIntensity * reflect);
 	}
 	//// Refacao (ERRADA WIKIPEDIA)
 	//float refract = material.getRefract();
@@ -236,7 +249,6 @@ RayTracer::DoubleColor RayTracer::shadePixel( IntersectionResult& aIntersectionR
 
 	// Refacao
 	float refract = material.getRefract();
-	ColorRGBf refractionResult(0,0,0);
 	if( refract > 0.0 && aRecursionCurrentLevel > 0 )
 	{
 		Vector3D viewVector = aScene->getCamera().getWorldPosition() - aIntersectionResult.point;
@@ -255,15 +267,12 @@ RayTracer::DoubleColor RayTracer::shadePixel( IntersectionResult& aIntersectionR
 
 		refractedVector.normalize();
 
-		refractionResult = this->traceRay(Ray(refractedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;
+		Fragment tempResult = this->traceRay(Ray(refractedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 );
+
+		result.color = (result.color * (1-refract)) + (tempResult.color * refract);
+		result.highIntensity = (result.highIntensity * (1-refract)) + (tempResult.highIntensity * refract);
+		//refractionResult = this->traceRay(Ray(refractedVector,aIntersectionResult.point), aScene, aRecursionCurrentLevel-1 ).color;
 	}
-
-	DoubleColor result;
-	
-	result.color = ((Ia + Id + Is)*(1-reflect) + reflectionResult*reflect)*(1-refract) +
-					   refractionResult*refract;
-
-	result.highIntensity = Is;
 
 	return result;
 }
