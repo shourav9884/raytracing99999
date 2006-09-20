@@ -1,5 +1,6 @@
 
 #include "OGLRenderSystem.h"
+#include "ColorRGBf.h"
 
 #include "glut.h"
 #include <cstdlib> // Devido ao NULL
@@ -106,11 +107,20 @@ void OGLRenderSystem::reshapeCanvas( int aWidth, int aHeight )
 	glPixelZoom( xFactor, yFactor );
 }
 
-void OGLRenderSystem::drawPixelsOverBuffer( void *aData )
+void OGLRenderSystem::drawPixelsOverBuffer( void *aData, bool aFullScreen, float aMaxSpreadFactor, float aIntensity, int aSamples )
 {
-	glClear( GL_ACCUM_BUFFER_BIT );
+//	glClear( GL_ACCUM_BUFFER_BIT );
 
-	glAccum(GL_ACCUM, 1.0);
+//	glAccum(GL_ACCUM, 1.0);
+
+	int leftVertexsOffset = 0;
+	if( !aFullScreen )
+	{
+		leftVertexsOffset = this->width/2;
+	}
+//	int specularBloomSamples = 11;
+//	float maxSpreadFactor = 0.05;
+//	float specularBloomIntensity = 2.0;
 
 	// Habilita a texturiazacao
 	glEnable( GL_TEXTURE_2D );
@@ -119,54 +129,56 @@ void OGLRenderSystem::drawPixelsOverBuffer( void *aData )
 	// Faz com que a cor da textura substitua a cor do objeto (não faz blending)
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 
+	float tempSpecularBloomFactor = ((float)aIntensity/(aSamples*aSamples));
+	ColorRGBf *tempImageDataPointer = reinterpret_cast<ColorRGBf *>(aData);
+	for( int i = 0; i < (this->width*this->height); i++ )
+	{
+		tempImageDataPointer[i] = tempImageDataPointer[i] * tempSpecularBloomFactor;
+	}
+
 	
 	//gluScaleImage(GL_RGB,this->width,this->height,GL_FLOAT,aData,widthOut,heightOut,GL_FLOAT, aDataOut);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this->width, this->height, GL_RGB, GL_FLOAT, aData);
 	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, widthOut, heightOut, GL_RGB, GL_FLOAT, aDataOut);
 
 	//glBlendFunc( GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA );
-	glBlendFunc( GL_ONE, GL_ZERO );
+	glBlendFunc( GL_ONE, GL_ONE );
 	//glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_COLOR );
 
-	int leftVertexsOffset = this->width/2;
-	int specularBloomSamples = 19;
-	float maxSpreadFactor = 0.05;
-	float specularBloomIntensity = 1.0;
-
 	// Quando a coordenada da textura deve mudar a cada camanda desenhada
-	float textureUVOffset = (2*maxSpreadFactor)/(specularBloomSamples-1);
+	float textureUVOffset = (2*aMaxSpreadFactor)/(aSamples-1);
 
-	for( int x = 0; x < specularBloomSamples; x++ )
+	for( int x = 0; x < aSamples; x++ )
 	{
-		for( int y = 0; y < specularBloomSamples; y++ )
+		for( int y = 0; y < aSamples; y++ )
 		{
 			// Limpa o color buffer para desenhar uma nova camanda nele
-			glClear( GL_COLOR_BUFFER_BIT );
+			//glClear( GL_COLOR_BUFFER_BIT );
 
 			// Desenha camada (cada camada é um plano colado com plano de projeção)
 			glBegin( GL_QUADS );				
 
-				glTexCoord2d( (0+maxSpreadFactor)-(textureUVOffset*x) + (double)leftVertexsOffset/this->width, (1+maxSpreadFactor)-(textureUVOffset*y));				
+				glTexCoord2d( (0+aMaxSpreadFactor)-(textureUVOffset*x) + (double)leftVertexsOffset/this->width, (1+aMaxSpreadFactor)-(textureUVOffset*y));				
 				glVertex2f( 0 + leftVertexsOffset, 0 );
 
-				glTexCoord2d( (1+maxSpreadFactor)-(textureUVOffset*x), (1+maxSpreadFactor)-(textureUVOffset*y));		
+				glTexCoord2d( (1+aMaxSpreadFactor)-(textureUVOffset*x), (1+aMaxSpreadFactor)-(textureUVOffset*y));		
 				glVertex2f( this->width, 0 );
 
-				glTexCoord2d( (1+maxSpreadFactor)-(textureUVOffset*x), (0+maxSpreadFactor)-(textureUVOffset*y) );		
+				glTexCoord2d( (1+aMaxSpreadFactor)-(textureUVOffset*x), (0+aMaxSpreadFactor)-(textureUVOffset*y) );		
 				glVertex2f( this->width, this->height );
 				
-				glTexCoord2d( (0+maxSpreadFactor)-(textureUVOffset*x) + (double)leftVertexsOffset/this->width, (0+maxSpreadFactor)-(textureUVOffset*y) );		
+				glTexCoord2d( (0+aMaxSpreadFactor)-(textureUVOffset*x) + (double)leftVertexsOffset/this->width, (0+aMaxSpreadFactor)-(textureUVOffset*y) );		
 				glVertex2f( 0 + leftVertexsOffset, this->height );
 				
 			glEnd();
 
 			// Adiciona camada ao accumulation buffer
-			glAccum(GL_ACCUM, specularBloomIntensity/(specularBloomSamples*specularBloomSamples));
+			//glAccum(GL_ACCUM, specularBloomIntensity/(specularBloomSamples*specularBloomSamples));
 		}
 	}
 
 	// Retorna imagem final que estava armazenada no accumulatio buffer para o color buffer
-	glAccum (GL_RETURN, 1.0);
+	//glAccum (GL_RETURN, 1.0);
 
 	glFlush();
 }

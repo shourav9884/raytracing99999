@@ -64,6 +64,32 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 				fs >> stringValue >> stringValue >> intValue;
 				aRayTracer.setRecursionLevel( intValue );
 			}
+			else if( readLine == string("#specularbloom") )
+			{
+				bool result = true;
+
+				fs >> stringValue >> stringValue >> stringValue ;
+				result = true;
+				if( stringValue == string("false") )
+					result = false;
+				aApproot.setSBEnable( result );
+
+				fs >> stringValue >> stringValue >> stringValue ;
+				result = true;
+				if( stringValue == string("false") )
+					result = false;
+				aApproot.setSBFullScreen( result );
+
+				fs >> stringValue >> stringValue >> floatValue1 ;
+				aApproot.setSBmaxSpreadFactor(floatValue1);
+
+				fs >> stringValue >> stringValue >> intValue ;
+				aApproot.setSBSamples(intValue);
+
+				fs >> stringValue >> stringValue >> floatValue1 ;
+				aApproot.setSBIntensity(floatValue1);
+
+			}
 			else if( readLine == string("#scene") )
 			{
 				fs >> stringValue >> stringValue >> floatValue1 >> floatValue2 >> floatValue3;
