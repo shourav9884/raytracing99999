@@ -23,7 +23,12 @@ pressedKeyUP(false),
 pressedKeyDOWN(false),
 pressedButtonLEFT(false),
 pressedButtonRIGHT(false),
-velocity(2.0)
+velocity(2.0),
+SBEnable(false),
+SBFullScreen(false),
+SBIntensity(2.0),
+SBmaxSpreadFactor(0.05),
+SBSamples(9)
 {
 }
 
@@ -63,7 +68,12 @@ void AppRoot::idleFunc( double deltaTime )
 	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton();
 
 	renderSystem.drawPixels( this->frameBuffer->colorBuffer );
-	renderSystem.drawPixelsOverBuffer( this->frameBuffer->highIntensityBuffer );
+
+	// Faz specular bloom quando ele está habilitado
+	if( this->SBEnable )
+	{
+		renderSystem.drawPixelsOverBuffer( this->frameBuffer->highIntensityBuffer, this->SBFullScreen, this->SBmaxSpreadFactor, this->SBIntensity, this->SBSamples );
+	}
 
 	this->handleKeyboardInputs( deltaTime );
 

@@ -7,6 +7,13 @@ zfar = 100.01
 clearColor = 0.3 0.3 0.3
 recursionLevel = 3
 
+#specularbloom
+enable = true
+fullscreen = false
+maxspreadfactor = 0.03
+samples = 11
+intensity = 1.0
+
 #scene
 ambientalLight = 0.5 0.5 0.4
 

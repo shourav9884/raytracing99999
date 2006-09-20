@@ -23,5 +23,5 @@ public:
 	void drawPixels( void *aData );
 	void reshapeCanvas( int aWidth, int aHeight );
 
-	void drawPixelsOverBuffer( void *aData );
+	void drawPixelsOverBuffer( void *aData, bool aFullScreen, float aMaxSpreadFactor, float aIntensity, int aSamples );
 };
