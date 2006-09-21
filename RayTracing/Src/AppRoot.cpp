@@ -58,6 +58,84 @@ void AppRoot::init( int argc, char **args )
 	////////////////////////////////////////////////////////////
 }
 
+void uniformDistribution( float c, int xPoint, int yPoint, ColorRGBf *buffer1, ColorRGBf *buffer2 )
+{
+//	if( c > 2 )
+	{
+		float r = c/2;
+		float a = 3.14*r*r;
+		ColorRGBf temp = buffer1[xPoint + yPoint * 300];
+		ColorRGBf intensity = temp/a;
+
+		for( int x = xPoint-r; x < xPoint+r; x++ )
+		{
+			for( int y = yPoint-r; y < yPoint+r; y++ )
+			{
+				if( x >= 0 && x < 300 &&
+					y >= 0 && y < 300 )
+				{
+					if( (x-xPoint)*(x-xPoint) + (y-yPoint)*(y-yPoint) < r*r)
+					{
+						buffer2[x + y * 300] = intensity + buffer2[x + y * 300];
+					}
+				}
+			}
+		}
+	}
+//	else 
+	{
+//		buffer2[xPoint + yPoint * 300] = buffer1[xPoint + yPoint * 300];
+	}
+}
+
+void DoF( FrameBuffer *buffer1 )
+{
+	ColorRGBf *buffer2 = new ColorRGBf[300*300];
+
+	for( int i = 0; i < 300*300; i++ )
+	{
+		buffer2[i] = ColorRGBf(0.0,0.0,0.0);
+	}
+
+
+	for( int x = 0; x < 300; x++ )
+	{
+		for( int y = 0; y < 300; y++ )
+		{	
+			float E = 10.0;
+			float df = 5.0;
+			float dr = 1.0;
+			float f = 1.0/(1.0/df + 1.0/dr);
+
+			float d = buffer1->zBuffer[x + y*300];
+
+			float Vd = (f*d)/(d-f);
+			float Vf = (f*df)/(df-f);
+
+			//float CoCDiameter = abs(a*(s*(1.0/f - 1.0/depth) - 1.0));
+			float CoCDiameter = (abs(Vd - Vf) * E/Vd)*4.0;
+
+			if(x == 150 && y == 150)
+			{
+				//printf("d = %.2f, CoC = %f\n", d, CoCDiameter);
+			}
+
+			uniformDistribution( CoCDiameter, x, y, buffer1->colorBuffer, buffer2  );
+		}
+	}
+
+	for( int i = 0; i < 300; i++ )
+	{
+		for( int j = 0; j < 300; j++ )
+		{
+			if( i > 100 )
+			{
+				buffer1->colorBuffer[i + j*300] = buffer2[i + j*300];
+			}
+		}		
+	}
+}
+
 void AppRoot::idleFunc( double deltaTime )
 {
 	// Executa ray tracing
@@ -67,13 +145,21 @@ void AppRoot::idleFunc( double deltaTime )
 
 	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton();
 
+	//DoF(this->frameBuffer);
+
 	renderSystem.drawPixels( this->frameBuffer->colorBuffer );
+
+	GLint temp = -10;
+
+	glGetIntegerv(GL_RED_BITS, &temp);
+	glGetIntegerv(GL_STENCIL_BITS, &temp);
+
 
 	// Faz specular bloom quando ele está habilitado
 	if( this->SBEnable )
 	{
 		renderSystem.drawPixelsOverBuffer( this->frameBuffer->highIntensityBuffer, this->SBFullScreen, this->SBmaxSpreadFactor, this->SBIntensity, this->SBSamples );
-	}
+	}	
 
 	this->handleKeyboardInputs( deltaTime );
 

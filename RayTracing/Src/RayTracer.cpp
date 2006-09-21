@@ -134,7 +134,7 @@ RayTracer::Fragment RayTracer::traceRay( const Ray& aRay, Scene* aScene , int aR
 	}
 
 	// Normaliza o zBuffer
-	result.zValue = static_cast<float>( (result.zValue - this->zNear)/(this->zFar - this->zNear));
+	//result.zValue = static_cast<float>( (result.zValue - this->zNear)/(this->zFar - this->zNear));
 
 	return result;
 }
