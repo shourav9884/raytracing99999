@@ -11,8 +11,8 @@ recursionLevel = 3
 enable = true
 fullscreen = true
 maxspreadfactor = 0.09
-samples = 19
-intensity = 0.55
+samples = 15
+intensity = 2.0
 
 #scene
 ambientalLight = 0.5 0.5 0.4

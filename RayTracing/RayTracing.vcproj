@@ -205,6 +205,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Src\CoCBorder.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Src\CoCBorderSet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Src\ColorRGBAf.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Src\ColorRGBf.cpp"
 				>
 			</File>
@@ -332,6 +344,18 @@
 			</File>
 			<File
 				RelativePath=".\Src\CameraController.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Src\CoCBorder.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Src\CoCBorderSet.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Src\ColorRGBAf.h"
 				>
 			</File>
 			<File

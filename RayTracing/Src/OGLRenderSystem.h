@@ -1,5 +1,8 @@
 #pragma once
 
+#include "glut.h"
+#include "FrameBuffer.h"
+
 class OGLRenderSystem
 {
 private: // Atributos estaticos
@@ -9,6 +12,8 @@ private: // Atributos estaticos
 	int height;
 	float xScale;
 	float yScale;
+
+	GLuint posProcTexIDs[2];
 
 private:
 	OGLRenderSystem( );
@@ -23,5 +28,6 @@ public:
 	void drawPixels( void *aData );
 	void reshapeCanvas( int aWidth, int aHeight );
 
-	void drawPixelsOverBuffer( void *aData, bool aFullScreen, float aMaxSpreadFactor, float aIntensity, int aSamples );
+	void drawPixelsOverBufferSB( void *aData, bool aFullScreen, float aMaxSpreadFactor, float aIntensity, int aSamples );
+	void drawPixelsOverBufferDoF( FrameBuffer *aFrameBuffer, bool aFullScreen, float aFocusPlaneDistance );
 };
