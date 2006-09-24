@@ -54,6 +54,7 @@ void GLUTHandler::printFPS(double aDeltaTime)
 		sprintf_s( stringFPS, "FPS = %.3f", (1.0/deltaTimeUsed) );
 
 		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
 		glColor3f(1,0,1);
 		glRasterPos2i(2,GLUTHandler::windowHeight-5);
 

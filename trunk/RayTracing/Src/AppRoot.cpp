@@ -145,21 +145,15 @@ void AppRoot::idleFunc( double deltaTime )
 
 	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton();
 
-	//DoF(this->frameBuffer);
-
 	renderSystem.drawPixels( this->frameBuffer->colorBuffer );
-
-	GLint temp = -10;
-
-	glGetIntegerv(GL_RED_BITS, &temp);
-	glGetIntegerv(GL_STENCIL_BITS, &temp);
-
 
 	// Faz specular bloom quando ele está habilitado
 	if( this->SBEnable )
 	{
-		renderSystem.drawPixelsOverBuffer( this->frameBuffer->highIntensityBuffer, this->SBFullScreen, this->SBmaxSpreadFactor, this->SBIntensity, this->SBSamples );
-	}	
+		renderSystem.drawPixelsOverBufferSB( this->frameBuffer->highIntensityBuffer, this->SBFullScreen, this->SBmaxSpreadFactor, this->SBIntensity, this->SBSamples );
+	}
+
+	//renderSystem.drawPixelsOverBufferDoF(this->frameBuffer, false, 10);
 
 	this->handleKeyboardInputs( deltaTime );
 
