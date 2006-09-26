@@ -1,0 +1,85 @@
+#raytracer
+width = 300
+height = 300
+tiny = 0.00001
+znear = 0.1
+zfar = 100.01
+clearColor = 0.1 0.1 0.1
+recursionLevel = 3
+
+#specularbloom
+enable = true
+fullscreen = true
+maxspreadfactor = 0.09
+samples = 5
+intensity = 5.0
+textureSize = 16
+
+#scene
+ambientalLight = 0.5 0.5 0.4
+
+#camera
+position = 7.0 5.0 -10.0
+v = 0.0 1.0 0.0
+n = -0.5 -0.5 1.0
+hx = 0.8
+hy = 0.8
+d = 1.0
+
+#box
+bl = -10.5 -9.0 -10.5
+bh = 10.5 -1.0 10.5
+diffuseColor = 0.5 0.5 0.5
+diffuseMap = images/brickDiffuse.jpg bilinear
+specularColor = 1.0 1.0 1.0
+specularLevel = 4.0
+glossiness = 5.0
+soften = 0.1
+specularMap = images/brickSpecular.jpg bilinear
+ambientColor = 0.2 0.2 0.2
+ambientMap = images/brickDiffuse.jpg bilinear
+reflect = 0.0
+refract = 0.0
+indexOfRefraction = 1.66
+normalMap = images/brickNormal.jpg bilinear
+
+
+#sphere
+center = -3.0 2.0 0.0
+radius = 3.0
+diffuseColor = 0.7 1.0 0.9
+specularColor = 1.0 1.0 1.0
+specularLevel = 3.0
+glossiness = 5.0
+soften = 0.4
+ambientColor = 0.7 1.0 0.9
+reflect = 0.0
+refract = 0.8
+indexOfRefraction = 1.2
+
+#sphere
+center = 3.0 1.5 -2.0
+radius = 2.0
+diffuseColor = 0.8 0.8 0.8
+specularColor = 1.0 1.0 1.0
+specularLevel = 2.0
+glossiness = 5.0
+soften = 0.2
+ambientColor = 0.4 0.4 0.4
+reflect = 0.7
+refract = 0.0
+indexOfRefraction = 1.2
+
+
+#omnilight
+center = 0.0 8.0 -8.0
+color = 1.0 0.86 0.41
+intensity = 1.0
+castShadow = true
+
+
+#omnilight
+center = 0.0 8.0 8.0
+color = 0.5 0.5 0.5
+intensity = 0.3
+castShadow = false

@@ -8,11 +8,12 @@ clearColor = 0.3 0.3 0.3
 recursionLevel = 2
 
 #specularbloom
-enable = false
+enable = true
 fullscreen = false
 maxspreadfactor = 0.04
 samples = 11
 intensity = 1.0
+textureSize = 16
 
 #scene
 ambientalLight = 0.5 0.5 0.4

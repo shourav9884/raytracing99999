@@ -7,6 +7,7 @@ using namespace std;
 #include "Box.h"
 #include "Sphere.h"
 #include "OmniLight.h"
+#include "OGLRenderSystem.h"
 
 void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer &aRayTracer, Scene &aScene)
 {
@@ -88,6 +89,9 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 
 				fs >> stringValue >> stringValue >> floatValue1 ;
 				aApproot.setSBIntensity(floatValue1);
+
+				fs >> stringValue >> stringValue >> intValue ;
+				OGLRenderSystem::getSingleton().setSBTextureResolution(intValue);
 
 			}
 			else if( readLine == string("#scene") )

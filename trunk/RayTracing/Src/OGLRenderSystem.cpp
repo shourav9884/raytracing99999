@@ -13,6 +13,11 @@ OGLRenderSystem *OGLRenderSystem::singleton;
 
 
 OGLRenderSystem::OGLRenderSystem()
+: width(300),
+  height(300),
+  xScale(1.0),
+  yScale(1.0),
+  SBTextureSize(32)
 {
 }
 
@@ -48,12 +53,13 @@ void OGLRenderSystem::init( int aWidth, int aHeight )
 	glBindTexture(GL_TEXTURE_2D, this->posProcTexIDs[0]);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	// Inicializa a textura que será utilizada para fazer o efeito de Specular Bloom
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_FLOAT, NULL);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->SBTextureSize, this->SBTextureSize, 0, GL_RGB, GL_FLOAT, NULL);
 
 
 	glBindTexture(GL_TEXTURE_2D, this->posProcTexIDs[1]);
@@ -166,10 +172,9 @@ void OGLRenderSystem::drawPixelsOverBufferSB( void *aData, bool aFullScreen, flo
 		tempImageDataPointer[i] = tempImageDataPointer[i] * tempSpecularBloomFactor;
 	}
 
-	
-	//gluScaleImage(GL_RGB,this->width,this->height,GL_FLOAT,aData,widthOut,heightOut,GL_FLOAT, aDataOut);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this->width, this->height, GL_RGB, GL_FLOAT, aData);
-	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, widthOut, heightOut, GL_RGB, GL_FLOAT, aDataOut);
+	gluScaleImage(GL_RGB,this->width,this->height,GL_FLOAT,aData,this->SBTextureSize,this->SBTextureSize,GL_FLOAT, aData);
+	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this->width, this->height, GL_RGB, GL_FLOAT, aData);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, this->SBTextureSize, this->SBTextureSize, GL_RGB, GL_FLOAT, aData);
 
 	//glBlendFunc( GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA );
 	glBlendFunc( GL_ONE, GL_ONE );
@@ -201,7 +206,7 @@ void OGLRenderSystem::drawPixelsOverBufferSB( void *aData, bool aFullScreen, flo
 					
 					glTexCoord2d( (0+aMaxSpreadFactor)-(textureUVOffset*x) + (double)leftVertexsOffset/this->width, (0+aMaxSpreadFactor)-(textureUVOffset*y) );		
 					glVertex2f( 0 + leftVertexsOffset, this->height );
-					
+
 				glEnd();
 			}
 
@@ -330,4 +335,10 @@ void OGLRenderSystem::drawPixelsOverBufferDoF( FrameBuffer *aFrameBuffer, bool a
 	glFlush();
 
 	glDisable(GL_ALPHA_TEST);
+}
+
+
+void OGLRenderSystem::setSBTextureResolution( int aSBTextureSize )
+{
+	this->SBTextureSize = aSBTextureSize;
 }

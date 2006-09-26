@@ -151,6 +151,7 @@ void AppRoot::idleFunc( double deltaTime )
 	if( this->SBEnable )
 	{
 		renderSystem.drawPixelsOverBufferSB( this->frameBuffer->highIntensityBuffer, this->SBFullScreen, this->SBmaxSpreadFactor, this->SBIntensity, this->SBSamples );
+		//renderSystem.drawPixelsOverBufferSB( this->frameBuffer->colorBuffer, this->SBFullScreen, this->SBmaxSpreadFactor, this->SBIntensity, this->SBSamples );
 	}
 
 	//renderSystem.drawPixelsOverBufferDoF(this->frameBuffer, false, 10);
