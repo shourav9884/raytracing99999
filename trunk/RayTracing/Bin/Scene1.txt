@@ -8,7 +8,7 @@ clearColor = 0.0 0.0 0.0
 recursionLevel = 3
 
 #specularbloom
-enable = true
+enable = false
 fullscreen = false
 maxspreadfactor = 0.1
 samples = 3
