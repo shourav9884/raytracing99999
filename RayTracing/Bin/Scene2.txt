@@ -1,6 +1,6 @@
 #raytracer
-width = 400
-height = 400
+width = 300
+height = 300
 tiny = 0.02
 znear = 0.1
 zfar = 100.01

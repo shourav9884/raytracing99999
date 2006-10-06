@@ -500,6 +500,10 @@
 				RelativePath=".\Bin\Scene7.txt"
 				>
 			</File>
+			<File
+				RelativePath=".\Bin\Scene8.txt"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
