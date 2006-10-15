@@ -9,19 +9,25 @@ recursionLevel = 3
 
 #specularbloom
 enable = false
-fullscreen = false
+fullscreen = true
 maxspreadfactor = 0.1
 samples = 5
 intensity = 6.0
 textureSize = 8
 
+#depthoffield
+enable = true
+lensAperture = 30.0
+focusedDistance = 3.0
+projectionPlaneDistance = 1.0
+
 #scene
 ambientalLight = 0.5 0.5 0.4
 
 #camera
-position = 0.0 0.0 -10.0
+position = 0.0 3.0 -10.0
 v = 0.0 1.0 0.0
-n = 0.0 0.0 1.0
+n = 0.1 -0.2 1.0
 hx = 0.8
 hy = 0.8
 d = 1.0
@@ -94,10 +100,22 @@ reflect = 0.0
 refract = 0.0
 indexOfRefraction = 2.00
 
+#sphere
+center = 2.0 1.0 2.0
+radius = 1.7
+diffuseColor = 0.6 0.6 0.6
+specularColor = 1.0 1.0 1.0
+specularLevel = 0.0
+glossiness = 10.0
+soften = 1.0
+ambientColor = 0.6 0.6 0.6
+reflect = 0.8
+refract = 0.0
+indexOfRefraction = 1.33
 
 #sphere
-center = 0.0 2.0 0.0
-radius = 3.0
+center = -1.5 2.0 -2.0
+radius = 2.0
 diffuseColor = 0.7 1.0 0.9
 specularColor = 1.0 1.0 1.0
 specularLevel = 1.0
@@ -106,9 +124,9 @@ soften = 1.0
 ambientColor = 0.7 1.0 0.9
 reflect = 0.0
 refract = 0.8
-indexOfRefraction = 1.23
+indexOfRefraction = 1.05
 #sphere
-center = 3.0 1.0 -4.0
+center = 2.0 1.0 -7.0
 radius = 1.5
 diffuseColor = 0.6 0.6 0.6
 specularColor = 1.0 1.0 1.0

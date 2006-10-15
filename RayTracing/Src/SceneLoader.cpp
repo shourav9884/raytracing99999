@@ -9,7 +9,7 @@ using namespace std;
 #include "OmniLight.h"
 #include "OGLRenderSystem.h"
 
-void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer &aRayTracer, Scene &aScene)
+void SceneLoader::loadScene( AppRoot &aApproot, RayTracer &aRayTracer, Scene &aScene)
 {
 	// Pega o nome do arquivo que contem a cena
 	fstream fs0;
@@ -92,6 +92,26 @@ void SceneLoader::loadScene(const char *aFilename, AppRoot &aApproot, RayTracer 
 
 				fs >> stringValue >> stringValue >> intValue ;
 				OGLRenderSystem::getSingleton().setSBTextureResolution(intValue);
+
+			}
+			else if( readLine == string("#depthoffield") )
+			{
+				bool result = true;
+
+				fs >> stringValue >> stringValue >> stringValue ;
+				result = true;
+				if( stringValue == string("false") )
+					result = false;
+				aApproot.setDoFEnable( result );
+
+				fs >> stringValue >> stringValue >> floatValue1 ;
+				aApproot.setDoFLensAperture(floatValue1);
+
+				fs >> stringValue >> stringValue >> floatValue1 ;
+				aApproot.setDoFFocusedDistance(floatValue1);
+
+				fs >> stringValue >> stringValue >> floatValue1 ;
+				aApproot.setDoFProjectionPlaneDistance(floatValue1);
 
 			}
 			else if( readLine == string("#scene") )

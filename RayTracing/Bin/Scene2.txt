@@ -8,12 +8,18 @@ clearColor = 0.3 0.3 0.3
 recursionLevel = 3
 
 #specularbloom
-enable = false
+enable = true
 fullscreen = false
 maxspreadfactor = 0.05
-samples = 7
+samples = 5
 intensity = 2.0
 textureSize = 64
+
+#depthoffield
+enable = false
+lensAperture = 50.0
+focusedDistance = 4.0
+projectionPlaneDistance = 1.0
 
 #scene
 ambientalLight = 0.5 0.5 0.4

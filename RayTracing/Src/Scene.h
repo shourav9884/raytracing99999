@@ -19,7 +19,6 @@ public:
 
 public:
 	Scene( void );
-	~Scene( void );
 
 	void init( );
 

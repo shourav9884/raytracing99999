@@ -8,12 +8,18 @@ clearColor = 0.1 0.1 0.1
 recursionLevel = 3
 
 #specularbloom
-enable = false
+enable = true
 fullscreen = true
 maxspreadfactor = 0.09
 samples = 5
 intensity = 5.0
 textureSize = 16
+
+#depthoffield
+enable = false
+lensAperture = 50.0
+focusedDistance = 10.0
+projectionPlaneDistance = 1.0
 
 #scene
 ambientalLight = 0.5 0.5 0.4
@@ -28,7 +34,7 @@ d = 1.0
 
 #box
 bl = -10.5 -9.0 -10.5
-bh = 10.5 -1.0 10.5
+bh = 10.5 -1.0 15.5
 diffuseColor = 0.5 0.5 0.5
 diffuseMap = images/brickDiffuse.jpg bilinear
 specularColor = 1.0 1.0 1.0
@@ -42,6 +48,23 @@ reflect = 0.0
 refract = 0.0
 indexOfRefraction = 1.66
 normalMap = images/brickNormal.jpg bilinear
+
+#box
+bl = 0.5 -1.0 5.4
+bh = 7.5 6.0 5.41
+diffuseColor = 0.5 0.5 0.5
+diffuseMap = images/colorGlassDiffuse.jpg bilinear
+specularColor = 1.0 1.0 1.0
+specularLevel = 4.0
+glossiness = 5.0
+soften = 0.1
+specularMap = null bilinear
+ambientColor = 0.2 0.2 0.2
+ambientMap = images/colorGlassDiffuse.jpg bilinear
+reflect = 0.0
+refract = 0.4
+indexOfRefraction = 1.33
+normalMap = images/colorGlassNormal.jpg bilinear
 
 
 #sphere
@@ -72,8 +95,8 @@ indexOfRefraction = 1.2
 
 
 #omnilight
-center = 0.0 8.0 -8.0
-color = 1.0 0.86 0.41
+center = 0.0 13.0 -8.0
+color = 1.0 0.86 0.61
 intensity = 1.0
 castShadow = true
 
@@ -81,5 +104,5 @@ castShadow = true
 #omnilight
 center = 0.0 8.0 8.0
 color = 0.5 0.5 0.5
-intensity = 0.3
+intensity = 0.05
 castShadow = false

@@ -15,6 +15,12 @@ samples = 5
 intensity = 5.0
 textureSize = 16
 
+#depthoffield
+enable = true
+lensAperture = 50.0
+focusedDistance = 5.0
+projectionPlaneDistance = 1.0
+
 #scene
 ambientalLight = 0.5 0.5 0.4
 
@@ -75,7 +81,7 @@ refract = 0.8
 indexOfRefraction = 1.2
 
 #sphere
-center = 3.0 1.5 -2.0
+center = 6.0 1.5 -5.0
 radius = 2.0
 diffuseColor = 0.8 0.8 0.8
 specularColor = 1.0 1.0 1.0

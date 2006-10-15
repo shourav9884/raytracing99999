@@ -21,6 +21,13 @@ private:
 	float SBmaxSpreadFactor;
 	float SBIntensity;
 
+	// Variaveis que controlam o Depth of Field
+	bool DoFEnable;
+	float DoFLensAperture;
+	float DoFFocusedDistance;
+	float DoFProjectionPlanedistance;
+
+
 	// Buffer onde a imagem final será armazenada
 	FrameBuffer *frameBuffer;
 
@@ -83,5 +90,25 @@ public:
 	void setSBIntensity( float aIntensity )
 	{
 		this->SBIntensity = aIntensity;
+	}
+
+	void setDoFEnable( bool aEnable )
+	{
+		this->DoFEnable = aEnable;
+	}
+
+	void setDoFLensAperture( float aLensAperture )
+	{
+		this->DoFLensAperture = aLensAperture;
+	}
+
+	void setDoFFocusedDistance( float aFocusedDistance )
+	{
+		this->DoFFocusedDistance = aFocusedDistance;
+	}
+
+	void setDoFProjectionPlaneDistance( float aProjectionPlaneDistance )
+	{
+		this->DoFProjectionPlanedistance = aProjectionPlaneDistance;
 	}
 };

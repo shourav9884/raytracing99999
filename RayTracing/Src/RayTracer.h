@@ -78,9 +78,19 @@ public:
 		this->zNear = aZNear;
 	}
 
+	double getZNear()
+	{
+		return this->zNear;
+	}
+
 	void setZFar( double aZFar )
 	{
 		this->zFar = aZFar;
+	}
+
+	double getZFar()
+	{
+		return this->zFar;
 	}
 
 	void setTiny( double aTiny )
