@@ -121,7 +121,7 @@ void GLUTHandler::startGLUT( int argc, char** args, int aWidth, int aHeight )
 	glutInitWindowSize( aWidth, aHeight );
 
 	// Cria a janela
-	glutCreateWindow( "RayTracing v0.00001" );
+	glutCreateWindow( "RayTracing v0.9" );
 
 	registerCallBacks();
 

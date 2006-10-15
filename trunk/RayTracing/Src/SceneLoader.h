@@ -8,5 +8,5 @@
 class SceneLoader
 {
 public:
-	static void loadScene( const char *aFilename, AppRoot &aApproot, RayTracer &aRayTracer, Scene &aScene );
+	static void loadScene( AppRoot &aApproot, RayTracer &aRayTracer, Scene &aScene );
 };

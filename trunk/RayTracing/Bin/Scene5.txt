@@ -15,6 +15,12 @@ samples = 11
 intensity = 1.0
 textureSize = 16
 
+#depthoffield
+enable = false
+lensAperture = 50.0
+focusedDistance = 4.0
+projectionPlaneDistance = 1.0
+
 #scene
 ambientalLight = 0.5 0.5 0.4
 

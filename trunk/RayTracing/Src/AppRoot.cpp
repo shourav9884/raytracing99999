@@ -28,7 +28,11 @@ SBEnable(false),
 SBFullScreen(false),
 SBIntensity(2.0),
 SBmaxSpreadFactor(0.05),
-SBSamples(9)
+SBSamples(9),
+DoFEnable(false),
+DoFLensAperture(50.0f),
+DoFFocusedDistance(7.0f),
+DoFProjectionPlanedistance(1.0f)
 {
 }
 
@@ -39,10 +43,10 @@ AppRoot::~AppRoot(void)
 
 void AppRoot::init( int argc, char **args )
 {	
-	//this->rayTracer.init( );
-	//this->scene.init( );
+	this->rayTracer.init( );
+	this->scene.init( );
 	
-	SceneLoader::loadScene("Scene1.txt", *this, this->rayTracer, this->scene);
+	SceneLoader::loadScene( *this, this->rayTracer, this->scene );
 	
 	this->cameraController.setCamera( &this->scene.getCamera() );
 	
@@ -63,11 +67,13 @@ void AppRoot::idleFunc( double deltaTime )
 	// Executa ray tracing
 	this->rayTracer.executeRayTracer( this->frameBuffer, &scene );
 
-	//GLUTHandler::drawPixels( this->filter->scanImage( this->frameBuffer->colorBuffer ));
-
 	OGLRenderSystem &renderSystem = OGLRenderSystem::getSingleton();
 
-	this->filter->filterDoF(this->frameBuffer);
+	// Faz DoF quando ele esta habilitado
+	if( this->DoFEnable )
+	{
+		this->filter->filterDoF(this->frameBuffer, this->DoFFocusedDistance, this->DoFLensAperture, this->DoFProjectionPlanedistance, this->rayTracer.getZNear(), this->rayTracer.getZFar());
+	}
 
 	renderSystem.drawPixels( this->frameBuffer->colorBuffer );
 
